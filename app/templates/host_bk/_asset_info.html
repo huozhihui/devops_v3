@@ -1,0 +1,111 @@
+{% extends "extends/base_page.html" %}
+{% block page_bread_crumbs %}
+    <ol class="breadcrumb">
+        <li><a href="#">主机</a></li>
+        <li><a href="#">10.43.4.85</a></li>
+        <li class="active">资产信息</li>
+    </ol>
+{% endblock %}
+{% block page_content %}
+    <form class="form-horizontal" role="form">
+        <!-- 系统信息 -->
+        <p class="mb0 ml15 fs18">系统信息</p>
+        <div class="page-header"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">系统类型</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.os_short }}">
+            </div>
+            <p class="help-block">Zabbix: 操作系统简写.</p>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">操作系统</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.os }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">系统位数</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.software }}">
+            </div>
+            <p class="help-block">Zabbix: 软件.</p>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">操作系统描述</label>
+            <div class="col-sm-6">
+                <textarea rows="3" class="form-control">{{ inventory.os_full }}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">系统主机名</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.name }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Mac地址</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.macaddress_a }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">软件应用程序</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.software_app_a }}">
+            </div>
+        </div>
+
+        <!-- 硬件信息 -->
+        <p class="mb0 ml15 fs18">硬件信息</p>
+        <div class="page-header"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">硬件</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.hardware }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">硬件描述</label>
+            <div class="col-sm-6">
+                <textarea rows="3" class="form-control">{{ inventory.hardware_full }}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">资产标签</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.asset_tag }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">序列号</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.serialno_a }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">软件应用程序</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.software_app_a }}">
+            </div>
+        </div>
+
+
+        <!-- 其他信息 -->
+        <p class="mb0 ml15 fs18">其他信息</p>
+        <div class="page-header"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">类型</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.type }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">类型</label>
+            <div class="col-sm-6">
+                <input class="form-control" value="{{ inventory.type_full }}">
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

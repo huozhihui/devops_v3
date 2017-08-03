@@ -1,0 +1,49 @@
+{% extends "extends/base_table.html" %}
+{% block page_bread_crumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('host.index') }}">主机管理</a></li>
+        <li class="active">{{ host.ip }}</li>
+    </ol>
+{% endblock %}
+{% block table_content %}
+    {% import 'macros/render_btn.html' as macros %}
+    <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr>
+                <th width="20%">日期</th>
+                <th width="80%">变更内容</th>
+                {#                <th width="15%">操作</th>#}
+            </tr>
+            </thead>
+            <tbody>
+            {% for aaa in data %}
+
+                <tr>
+                    <td>{{ aaa['date'] }}</td>
+                    <td><a href="#" id="content_{{ aaa['id'] }}">{{ ','.join(aaa['content'].keys()) }}</a></td>
+                    <div id="myPopover{{ aaa['id'] }}" class="popover popover-default">
+                        <div class="arrow"></div>
+                        <div class="popover-title">
+                            <span class="close" data-dismiss="popover-x">&times;</span>日期: {{ aaa['date'] }}
+                        </div>
+                        <div class="popover-content" style="min-width: 300px; min-height: 100px;">
+                            {% for key, val in aaa['content'].items() %}
+                                <p class="text-justify">
+                                    {{ key }}: {{ val[0] }} => {{ val[1] }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% include 'inventory_update/_js.html' %}
+{% endblock %}

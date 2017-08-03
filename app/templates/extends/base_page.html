@@ -1,0 +1,22 @@
+{% extends "extends/base.html" %}
+{% block title %}{{ title_name }}{% endblock %}
+{% block base_content %}
+    <!-- 面包屑 -->
+    {% block page_bread_crumbs %}
+        {#    <ol class="breadcrumb">#}
+        {#        <li><a href="#">Home</a></li>#}
+        {#        <li><a href="#">Library</a></li>#}
+        {#        <li class="active">Data</li>#}
+        {#    </ol>#}
+    {% endblock %}
+
+    <!-- 页面主标题 -->
+    {% block page_header %}
+        <div class="page-header">
+            <h3>{{ header }}</h3>
+        </div>
+    {% endblock %}
+
+    <!-- 页面主内容 -->
+    {% block page_content %}{% endblock %}
+{% endblock %}

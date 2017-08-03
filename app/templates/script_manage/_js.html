@@ -1,0 +1,25 @@
+<script>
+    $(function () {
+        // 代码编辑器
+
+        // 名称校验
+        $('#name').addClass('CommonNameCN');
+        // 脚本类型
+        $('#type').change(function () {
+            lang = $(this).val();
+            if (lang == 'sh') {
+                $('#content').ace({theme: 'xcode', lang: 'sh'});
+            } else if (lang == 'py') {
+                $('#content').ace({theme: 'xcode', lang: 'python'});
+            } else if (lang == 'yml') {
+                $('#content').ace({theme: 'xcode', lang: 'yaml'});
+            }
+            console.log($(this).val())
+        })
+        // 脚本内容
+        $('#content').attr({'rows': 15});
+        $('#content').ace({theme: 'xcode', lang: 'sh'});
+
+    });
+    $("form").validate();
+</script>

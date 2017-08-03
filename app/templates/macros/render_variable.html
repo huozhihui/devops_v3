@@ -1,0 +1,45 @@
+{% macro render_variables(label_name, controll, ajax_method, count, input_values) %}
+    {% set var_th = "/%s/_var_th.html" % controll %}
+    {% set var_tr = "/%s/_var_tr.html" % controll %}
+    {% set ajax_url = "/%s/%s/" % (controll, ajax_method) %}
+    {% set row_count = count + 1 %}
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="name">{{ label_name }}</label>
+        <div class=" col-sm-6">
+            <table class="table no_border" id="var_table">
+                <thead>
+                {% include var_th %}
+                </thead>
+                <tbody>
+                {% import "macros/render_variable.html" as macros %}
+                <!-- 添加时 -->
+                {% if not input_values %}
+                    {% for i in range(1, row_count) %}
+                        {{ macros.render_var_tr(var_tr, loop.index, []) }}
+                    {% endfor %}
+                {% else %}
+                    <!-- 编辑时 -->
+                    {% for value in input_values %}
+                        {{ macros.render_var_tr(var_tr, loop.index, value) }}
+                    {% endfor %}
+                {% endif %}
+                <tr>
+                    <td colspan="{{ row_count }}">
+                        <a href="#" class="btn btn-success btn-xs"
+                           onclick="add_var_row('{{ ajax_url }}'); return false;">
+                            <i class="fa fa-plus"></i>添加
+                        </a>
+                        <a href="#" class="btn btn-xs btn-danger" onclick="del_var_row(); return false;">
+                            <i class="fa fa-trash"></i>删除
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_var_tr(var_tr, i, value) %}
+    {% include var_tr %}
+{% endmacro %}

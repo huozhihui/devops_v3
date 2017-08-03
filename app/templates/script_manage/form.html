@@ -1,0 +1,23 @@
+{% extends "extends/base_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_content %}
+    {#    {{ wtf.quick_form(form, id="myform", form_type="horizontal", horizontal_columns=('sm', 2, 6)) }}#}
+    <form action="" id="myform" method="post" class="form form-horizontal" enctype="multipart/form-data" role="form"
+          novalidate="novalidate">
+        {{ form.csrf_token }}
+        {% import 'macros/render_field.html' as macros %}
+        {{ macros.render_field(form.name) }}
+        {{ macros.render_field(form.type) }}
+        {{ macros.render_field(form.content) }}
+        {% import 'macros/render_variable.html' as macros2 %}
+        {{ macros2.render_variables('脚本变量', 'script_manage', 'ajax_add_var_tr', 4, input_values) }}
+        {{ macros.render_field(form.notes) }}
+        {% import 'macros/render_submit.html' as macros %}
+        {{ macros.render_submit(url_for('script_manage.index')) }}
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% include 'script_manage/_js.html' %}
+{% endblock %}

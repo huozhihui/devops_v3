@@ -1,0 +1,58 @@
+<script>
+    var chart = null;
+    $(function () {
+        $('#container-monitor').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+{#                spacing: [10, 10, 10, 10]#}
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                floating: true,
+                text: '监控项：50',
+                style: {"color": "#333333", "fontSize": "13px"}
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    center: ['50%', '50%'],
+                    cursor: 'pointer',
+                    size: '70%',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.y}',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '80%',
+                name: '百分比',
+                data: [
+                    ['已启用', 20],
+                    ['已禁用', 5],
+                    ['模版', 25]
+                ]
+            }]
+        }, function (c) {
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                    titleHeight = parseInt(c.title.styles.fontSize);
+            c.setTitle({
+                y: centerY + titleHeight / 2
+            });
+            chart = c;
+        });
+    });
+
+</script>

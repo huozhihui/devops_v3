@@ -1,0 +1,18 @@
+<!-- 提示消息 -->
+{% macro render_flash(msg, status='success') %}
+    {{ flash(msg, status) }}
+{% endmacro %}
+
+<!-- 隐藏的成功提示消息 -->
+{% macro render_hide_flash(status='success') %}
+    {{ flash('', status, 'hide') }}
+{% endmacro %}
+
+
+<!-- 提示消息 -->
+{% macro flash(msg, status, class="") %}
+    <div class="alert alert-{{ status }} {{ class }}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div class="flash_msg">{{ msg }}</div>
+    </div>
+{% endmacro %}

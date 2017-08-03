@@ -1,0 +1,55 @@
+<!-- 普通按钮 -->
+{% macro render_btn(name, url, id) %}
+    <a href="{{ url_for(url, id=id) }}"
+       class="btn btn-outline btn-primary btn-xs">{{ name }}
+    </a>
+{% endmacro %}
+
+
+<!-- 弹出框按钮 -->
+{% macro render_dialog_btn(name, url, id) %}
+    <a href="#" data-target="#myModal" data-toggle="modal" onclick="show_dialog('{{ url_for(url, id=id) }}')"
+       remote="true" class="btn btn-outline btn-primary btn-xs">{{ name }}
+    </a>
+{% endmacro %}
+
+<!-- ajax按钮-->
+{% macro render_ajax_btn(name, method) %}
+    <a href="#" onclick="{{ method }}"
+       class="btn btn-outline btn-default">{{ name }}
+    </a>
+{% endmacro %}
+
+<!-- 正在执行, 带加载图标的按钮 -->
+{% macro render_load_btn(name, tip_msg='') %}
+    {% set tip_msg = tip_msg or "正在%s" % name %}
+    <a href="#" id="load" data-loading-text="<i class='fa fa-spinner fa-spin'></i> {{ tip_msg }} "
+       class="btn btn-outline btn-default">{{ name }}
+    </a>
+{% endmacro %}
+
+
+
+<!-- 添加按钮 -->
+{% macro render_add_btn(url) %}
+    <a href="{{ url_for(url) }}" class="btn btn-outline btn-default">添加</a>
+{% endmacro %}
+
+<!-- default btn -->
+{% macro render_default_btn(name, url) %}
+    <a href="{{ url_for(url) }}" class="btn btn-outline btn-default">{{ name }}</a>
+{% endmacro %}
+
+<!-- 编辑按钮 -->
+{% macro render_edit_btn(url, id) %}
+    <a href="{{ url_for(url, id=id) }}"
+       class="btn btn-outline btn-primary btn-xs">编辑
+    </a>
+{% endmacro %}
+
+<!-- 删除按钮 -->
+{% macro render_del_btn(url, id) %}
+    <a href="{{ url_for(url, id=id) }}" data-del="true"
+       class="btn btn-outline btn-primary btn-xs">删除
+    </a>
+{% endmacro %}

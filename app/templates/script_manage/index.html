@@ -1,0 +1,34 @@
+{% extends "extends/base_table.html" %}
+{% block table_content %}
+    {% import 'macros/render_btn.html' as macros %}
+    <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr>
+                <th width="25%">名称</th>
+                <th width="10%">类型</th>
+                <th width="30%">备注</th>
+                <th width="15%">更新日期</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in objects %}
+                <tr>
+                    <td>{{ obj.name }}</td>
+                    <td>{{ obj.type_name() }}</td>
+                    <td>{{ obj.notes }}</td>
+                    <td>{{ obj.updated_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {{ macros.render_btn('执行', 'script_manage.execute', obj.id) }}
+                        {{ macros.render_edit_btn('script_manage.edit', obj.id) }}
+                        {{ macros.render_del_btn('script_manage.delete', obj.id) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- /.table-responsive -->
+    {{ macros.render_add_btn('script_manage.new') }}
+{% endblock %}

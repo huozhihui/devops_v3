@@ -1,0 +1,36 @@
+<!--
+说明: 动态增加td页面
+
+    1、当td列增加时,对应的input的值依次往后排,即value[0], value[1], values[2], .........
+
+    2、i变量为固定名称,不可更改。
+
+-->
+{% if value %}
+    <tr>
+        <td>{{ i }}</td>
+        <td>
+            <input class="form-control" id="var_name_{{ i }}" name="var_name[]" type="text"
+                   value="{{ value[0] }}">
+        </td>
+        <td>
+            <input class="form-control" id="var_value_{{ i }}" name="var_value[]" type="text"
+                   value="{{ value[1] }}">
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td>{{ i }}</td>
+        <td>
+            <input class="form-control" id="var_name_{{ i }}" name="var_name[]" type="text"
+                   value="">
+        </td>
+        <td>
+            <input class="form-control" id="var_value_{{ i }}" name="var_value[]" type="text"
+                   value="">
+        </td>
+    </tr>
+{% endif %}
+
+
+

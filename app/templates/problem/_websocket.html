@@ -1,0 +1,46 @@
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        if (window.WebSocket == undefined) {
+            alert('浏览器不支持Web Socket');
+            return false
+        }
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect', function () {
+            socket.emit('connect_event', {method: 'ws_problem_update_table', data: {}});
+        });
+
+        var table_tbody = $('#dataTables-example tbody');
+
+        // 更新表数据
+        socket.on('ws_problem_update_table', function (msg) {
+            // 清除所有表
+            table_tbody.empty();
+            for (var i = 0; i < msg.data.length; i++) {
+                create_table('dataTables-example', msg.data[i]);
+            }
+        });
+
+        // 更新表严重程度背景色
+        socket.on('ws_problem_update_priority_color', function (msg) {
+            for (var i = 0; i < msg.data.length + 1; i++) {
+                table_tbody.children("tr:nth-child(" + (i + 1) + ")").each(function () {
+                    $(this).children("td:nth-child(2)").addClass(msg.data[i])
+                })
+            }
+        })
+
+    });
+
+    // 更新报警列表
+    function create_table(table_id, data) {
+        // 准备生成的行
+        td_arr = new Array();
+        for (var i = 0; i < data.length; i++) {
+            td_arr.push('<td>' + data[i] + '</td>')
+        }
+        tds = td_arr.join('');
+        tr = "<tr>" + tds + "</tr>";
+        $('#' + table_id + " tbody").append(tr);
+    }
+
+</script>

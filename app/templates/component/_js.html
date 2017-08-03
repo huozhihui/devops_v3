@@ -1,0 +1,86 @@
+<script>
+    $(function () {
+        // 名称校验
+        $('#name').addClass('valid_letter_num');
+        $('#name').attr('maxlength', 30);
+        {#        $('#name').addClass('CommonNameCN');#}
+        {#        $('#name').attr('min', 1);#}
+        {#        $('#name').attr('max', 15);#}
+        // 版本
+        $('#version').attr('maxlength', 30);
+        // 适用系统
+        $('#os').addClass('valid_os');
+        $('#os').attr('maxlength', 30);
+        // 脚本内容
+        $('#content').attr({'rows': 15});
+        $('#content').ace({theme: 'xcode', lang: 'yaml'});
+
+
+        // 安装包/脚本上传
+        $('#files').attr({name: 'files[]', multiple: true});
+        {#        $('#files').addClass('file-loading');#}
+        {#        , uploadUrl: "/upload/file"#}
+        $('#files').fileinput({
+{#            initialPreview: [#}
+{#                'http://127.0.0.1:5000/uploads/ntp_server/ntp_server.conf',#}
+{#                'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg',#}
+{#                'http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg'#}
+{#            ],#}
+{#            initialPreviewAsData: true,#}
+            // 隐藏Upload按钮
+            showUpload: false,
+            // 是否显示文件信息
+            {#            showPreview: false,#}
+            {#            maxFilePreviewSize: 1024,#}
+            maxFileSize: 16 * 1024 * 1024,
+            // 上传文件个数
+            maxFileCount: 10
+        });
+
+        // 配置/模版上传
+        $('#templates').attr({name: 'templates[]', multiple: true});
+        $('#templates').fileinput({showUpload: false});
+
+        // 备注
+        $('#notes').attr({'rows': 5});
+
+        // $("#input-44").fileinput({
+        // 实现可拖动
+        // theme: "fa",
+        // uploadUrl: "/file-upload-batch/2",
+
+        // hide image, pdf, text or other content in the thumbnail preview
+        // hideThumbnailContent: true,
+
+        // maxFilePreviewSize: 10240
+        // 上传文件个数
+        // maxFileCount: 10,
+        // 允许的类型
+        // allowedFileTypes: ["image", "video"]
+        // 允许的后缀
+        // allowedFileExtensions: ["jpg", "png", "gif"]
+        //         });
+
+
+    });
+
+    $("form").validate({ignore: []});
+
+    // 变量增加行
+    function add_var_row() {
+        var tbody = $('#var_table tbody');
+        count = tbody.children('tr').length;
+        $.ajax({
+            url: '/component/ajax_add_var_tr/' + count,
+            method: "get",
+            success: function (response) {
+                tbody.children('tr:last').before(response);
+            }
+        });
+    }
+
+    // 变量删除最后行
+    function del_var_row() {
+        $('#var_table tbody tr:nth-last-child(2)').remove();
+    }
+</script>

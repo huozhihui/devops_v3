@@ -1,0 +1,61 @@
+{% extends "extends/base_page.html" %}
+{% block page_header %}{% endblock %}
+{% block page_content %}
+    <!-- 标签页 -->
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active">
+            <a href="#" onclick="update_tab_content('asset_info')" data-toggle="tab">
+                资产信息
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="update_tab_content('system_info')" data-toggle="tab">
+                系统信息
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="update_tab_content('problem_info')" data-toggle="tab">
+                问题
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="update_tab_content('trigger_info')" data-toggle="tab">
+                触发器
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="update_tab_content('monitor_info')" data-toggle="tab">
+                监控项
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="update_tab_content('graphics_info')" data-toggle="tab">
+                图形
+            </a>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">更多操作
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+                <li><a href="#reboot" tabindex="-1" data-toggle="tab">重启</a></li>
+                <li><a href="#console" tabindex="-1" data-toggle="tab">控制台</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#send_file" tabindex="-1" data-toggle="tab">文件下发</a></li>
+                <li><a href="#software" tabindex="-1" data-toggle="tab">软件部署</a></li>
+                <li><a href="#corn" tabindex="-1" data-toggle="tab">定时任务</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- 标签页内容 -->
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active mt10">
+            {% block tab_content %}{% endblock %}
+        </div>
+    </div>
+
+{% endblock %}
+
+

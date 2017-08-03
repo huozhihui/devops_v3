@@ -1,0 +1,33 @@
+{% extends "extends/base_table.html" %}
+{% block table_content %}
+    {% import 'macros/render_btn.html' as macros %}
+    <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in objects %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ obj.name }}</td>
+                    <td>
+{#                        {{ macros.render_btn('编辑', 'cmp.edit', obj.id) }}#}
+{#                        {{ macros.render_btn('删除', 'cmp.delete', obj.id) }}#}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        {{ macros.render_add_btn('cmp.new') }}
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

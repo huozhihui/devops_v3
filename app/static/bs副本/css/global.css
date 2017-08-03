@@ -1,0 +1,157 @@
+/* 设置字体大小 */
+.fs12 {
+    font-size: 12px;
+}
+
+.fs14 {
+    font-size: 14px;
+}
+
+.fs16 {
+    font-size: 16px;
+}
+
+.fs18 {
+    font-size: 18px;
+}
+
+.fs24 {
+    font-size: 24px;
+}
+
+/* 设置margin */
+.mt10 {
+    margin-top: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb0 {
+    margin-bottom: 0px;
+}
+
+.mb5 {
+    margin-bottom: 5px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.ml15 {
+    margin-left: 15px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.m0 {
+    margin: 0px;
+}
+
+.pl5 {
+    padding-left: 5px;
+}
+
+.fl {
+    float: left;
+}
+
+/* 设置颜色 */
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+/* 设置宽度 */
+.wth120 {
+    width: 120px;
+}
+
+.wth130 {
+    width: 130px;
+}
+
+.wth_p10 {
+    width: 10%;
+}
+
+.wth_p80 {
+    width: 80%;
+}
+
+.wth140 {
+    width: 10%;
+}
+
+.ht28 {
+    height: 28px;
+}
+
+.ok, .changed {
+    color: green;
+}
+
+.failed, .unreachable {
+    color: red;
+}
+
+.error {
+    color: red;
+}
+
+div#reload {
+    text-align: center;
+    position: fixed;
+    left: -1px;
+    top: 1px;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+#reload img {
+    top: 50%;
+    position: absolute;
+}
+
+.scroll {
+    max-height: 400px;
+    overflow: auto;
+}
+
+div.dialog tr.cust_tr {
+    /*display: block;*/
+    padding: 15px;
+    line-height: 30px;
+}
+
+div.dialog tr.cust_tr td:first-child {
+    width: 10%;
+    text-align: right;
+    vertical-align: top;
+}
+
+/* 扩展bootstrap */
+.label-info, .badge-info {
+    background-color: #3a87ad;
+}
+.badge-important {
+    background-color: #b94a48;
+}
+.label-warning, .badge-warning {
+    background-color: #f89406;
+}
+.label-success, .badge-success {
+    background-color: #468847;
+}

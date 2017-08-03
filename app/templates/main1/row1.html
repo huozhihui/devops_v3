@@ -1,0 +1,9 @@
+{% import "macros/main/render_component.html" as macros %}
+<!-- 显示云平台各组件信息 -->
+<div class="row">
+    {{ macros.render_component('Keystone', 1, 'panel-primary', 'fa-key') }}
+    {{ macros.render_component('Controller', 4, 'panel-green', 'fa-gears') }}
+    {{ macros.render_component('Nova', 49, 'panel-green', 'fa-sitemap') }}
+    {{ macros.render_component('Cinder', 1, 'panel-yellow', 'fa-tasks') }}
+    {{ macros.render_component('Horizon', 1, 'panel-info', 'fa-dashboard') }}
+</div>

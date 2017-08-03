@@ -1,0 +1,46 @@
+{% extends "extends/base_table.html" %}
+{% block page_bread_crumbs %}
+    <ol class="breadcrumb">
+        <li><a href="#">组件管理</a></li>
+        <li class="active">变量管理</li>
+{#        <li class="active">Data</li>#}
+    </ol>
+{% endblock %}
+{% block table_content %}
+    {% import 'macros/render_btn.html' as macros %}
+    <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr>
+                <th width="10%">序号</th>
+                <th width="15%">隶属于</th>
+                <th width="10%">类型</th>
+                <th width="15%">名称</th>
+                <th width="15%">默认值</th>
+                <th width="15%">备注</th>
+                <th width="20%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in objects %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ obj.component.name }}</td>
+                    <td>{{ obj.type }}</td>
+                    <td>{{ obj.name }}</td>
+                    <td>{{ obj.value }}</td>
+                    <td>{{ obj.notes }}</td>
+
+                    <td>
+                        {#                        {{ macros.render_btn('任务编排', 'homework.create_task', obj.id) }}#}
+                        {{ macros.render_edit_btn('variable.edit', obj.id) }}
+                        {{ macros.render_del_btn('variable.delete', obj.id) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- /.table-responsive -->
+    {{ macros.render_add_btn('variable.new') }}
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "extends/base_page.html" %}
+{% block page_header %}
+    <div class="page-header">
+        <h3>服务器: 127.0.0.1</h3>
+    </div>
+{% endblock %}
+{% block page_content %}
+    <!-- 仪表 -->
+    {#        <div style="width: 675px; height: 160px; margin: 0 auto">#}
+    {#            <div id="container-memory" style="width: 225px; height: 160px; float: left"></div>#}
+    {#            <div id="container-disk" style="width: 225px; height: 160px; float: left"></div>#}
+    {#            <div id="container-online-host" style="width: 225px; height: 160px; float: left"></div>#}
+    {#        </div>#}
+    {#        <div class="page-header"></div>#}
+
+
+    <!-- 主机、触发器、监控数量等 -->
+            <div style="width: 930px; height: 180px; margin: 0 auto">
+                <div id="container-host-count" style="min-width:310px;height:180px; float: left"></div>
+                <div id="container-trigger" style="min-width:310px;height:180px; float: left"></div>
+                <div id="container-monitor" style="min-width:310px;height:180px; float: left"></div>
+            </div>
+
+    <!-- cpu使用率、磁盘使用率、线程数等 -->
+    <div style="height: 300px; margin: 0 auto">
+        <div id="container-cpu-percent" style="width:300px;height:250px; float: left; padding: 0 20px;"></div>
+        <div id="container-disk-percent" style="width:300px;height:250px; float: left; padding: 0 20px;"></div>
+        <div id="container-memory-percent" style="width:300px;height:250px; float: left; padding: 0 20px;"></div>
+    </div>
+
+    <!-- 主机状态、问题等 -->
+    <div style="height: 300px; margin: 0 auto">
+        <div id="container-host-status" style="width:400px;height:280px; float: left; padding: 0 20px;"></div>
+        <div id="container-host-problem" style="width:400px;height:280px; float: left; padding: 0 20px;"></div>
+    </div>
+
+
+    {#    <div id="container" style="width:400px;height:300px"></div>#}
+    {#    <div id="container" style="min-width:400px;height:400px"></div>#}
+
+
+    <!-- 分割线 -->
+    <div class="page-header"></div>
+
+    <!-- 标签页 -->
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active"><a href="#asset_info" data-toggle="tab">资产信息</a></li>
+        <li><a href="#system_info" data-toggle="tab">系统信息</a></li>
+        <li><a href="#problem_info" data-toggle="tab">问题</a></li>
+        <li><a href="#trigger_info" data-toggle="tab">触发器</a></li>
+        <li><a href="#monitor_info" data-toggle="tab">监控项</a></li>
+        <li><a href="#graphics_info" data-toggle="tab">图形</a></li>
+
+
+        <li class="dropdown">
+            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">更多操作
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+                <li><a href="#reboot" tabindex="-1" data-toggle="tab">重启</a></li>
+                <li><a href="#console" tabindex="-1" data-toggle="tab">控制台</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#send_file" tabindex="-1" data-toggle="tab">文件下发</a></li>
+                <li><a href="#software" tabindex="-1" data-toggle="tab">软件部署</a></li>
+                <li><a href="#corn" tabindex="-1" data-toggle="tab">定时任务</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- 标签页内容 -->
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active mt10" id="asset_info">
+            <p></p>
+            <p>资产信息</p>
+        </div>
+        <div class="tab-pane fade mt10" id="system_info">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>内容</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Mark</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Jacob</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Larry</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+        <div class="tab-pane fade mt10" id="problem_info">
+            <div class="form-group">
+                <label>类型</label>
+                <input class="form-control">
+                <p class="help-block">Example block-level help text here.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id='log'></div>
+
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    {% include 'main/_ss_cpu_percent.html' %}
+    {% include 'main/_ss_disk_percent.html' %}
+    {% include 'main/_ss_memory_percent.html' %}
+
+
+    {% include 'main/_zx_host.html' %}
+    {% include 'main/_zx_problem.html' %}
+
+
+    {% include 'main/_cpu_and_memory_percent.html' %}
+    {% include 'main/_memory.html' %}
+    {% include 'main/_trigger.html' %}
+    {% include 'main/_host_count.html' %}
+    {% include 'main/_monitor.html' %}
+
+
+    {#    {% include 'main/_websocket.html' %}#}
+{% endblock %}

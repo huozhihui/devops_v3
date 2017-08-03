@@ -1,0 +1,5 @@
+<td class="{{ pb.priority_color }}">{{ pb.priority_name }}</td>
+<td class="red">{{ pb.status_name }}</td>
+<td>{{ pb.last_change }}</td>
+<td>{{ pb.up_to_now() }}</td>
+<td>{{ pb.description|truncate(100) }}</td>

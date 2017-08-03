@@ -1,0 +1,31 @@
+<div class="form-group">
+    <label class="control-label col-sm-2" for="name">脚本变量</label>
+    <div class=" col-sm-6">
+        <table class="table no_border" id="var_table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>默认值</th>
+                <th>类型</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% import "macros/component/render_var_tr.html" as macros %}
+            {% for i in range(1, 4) %}
+                {{ macros.render_var_tr(i) }}
+            {% endfor %}
+            <tr>
+                <td colspan="4">
+                    <a href="#" class="btn btn-success btn-xs" onclick="add_var_row(); return false;">
+                        <i class="fa fa-plus"></i>添加
+                    </a>
+                    <a href="#" class="btn btn-xs btn-danger" onclick="del_var_row(); return false;">
+                        <i class="fa fa-trash"></i>删除
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<script>
+{#    $(function () {#}
+{#        $('#container').highcharts({#}
+{#            chart: {#}
+{#                type: 'column'#}
+{#            },#}
+{#            title: {#}
+{#                text: '主机：200'#}
+{#            },#}
+{#            xAxis: {#}
+{#                categories: ['正常', '异常']#}
+{#            },#}
+{#            yAxis: {#}
+{#                min: 0,#}
+{#                title: {#}
+{#                    text: '台数'#}
+{#                },#}
+{#                stackLabels: {#}
+{#                    enabled: true,#}
+{#                    style: {#}
+{#                        fontWeight: 'bold',#}
+{#                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'#}
+{#                    }#}
+{#                }#}
+{#            },#}
+{#            legend: {#}
+{#                align: 'right',#}
+{#                x: -30,#}
+{#                verticalAlign: 'top',#}
+{#                y: 25,#}
+{#                floating: true,#}
+{#                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',#}
+{#                borderColor: '#CCC',#}
+{#                borderWidth: 1,#}
+{#                shadow: false#}
+{#            },#}
+{#            tooltip: {#}
+{#                formatter: function () {#}
+{#                    return '<b>' + this.x + '</b><br/>' +#}
+{#                            this.series.name + ': ' + this.y + '<br/>' +#}
+{#                            '总量: ' + this.point.stackTotal;#}
+{#                }#}
+{#            },#}
+{#            plotOptions: {#}
+{#                column: {#}
+{#                    stacking: 'normal',#}
+{#                    dataLabels: {#}
+{#                        enabled: true,#}
+{#                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',#}
+{#                        style: {#}
+{#                            textShadow: '0 0 3px black'#}
+{#                        }#}
+{#                    }#}
+{#                }#}
+{#            },#}
+{#            series: [{#}
+{#                name: '设备',#}
+{#                data: [5, 3]#}
+{#            }, {#}
+{#                name: '虚机',#}
+{#                data: [2, 2]#}
+{#            }, {#}
+{#                name: '物理机',#}
+{#                data: [3, 4]#}
+{#            }]#}
+{#        });#}
+{#    });#}
+    $(function () {
+        $('#container-host-status').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '主机状态'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    '正常',
+                    '异常',
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '台数'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    // pointPadding: 0.2,
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true, // dataLabels设为true
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: '物理机',
+                // color: '#95ceff',
+                // color: '#1E90FF',
+                data: [49.9, 71]
+            }, {
+                name: '虚机',
+                color: '#90ed7d',
+                data: [20, 40]
+            }, {
+                name: '设备',
+                color: '#CCC',
+                data: [11, 20]
+            }]
+        });
+    });
+
+</script>

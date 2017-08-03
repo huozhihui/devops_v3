@@ -1,0 +1,10 @@
+<script>
+    $(function () {
+        {% for aaa in data %}
+        $('#content_{{ aaa['id'] }}').popoverButton({
+            trigger: 'hover focus',
+            target: '#myPopover{{ aaa['id'] }}'
+        });
+        {% endfor %}
+    })
+</script>

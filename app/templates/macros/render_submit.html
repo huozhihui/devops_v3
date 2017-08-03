@@ -1,0 +1,25 @@
+<!-- 提交返回按钮 -->
+{% macro render_submit(url, submit_name='提交') %}
+    <div class="form-group">
+        <label class="control-label col-sm-2" for=""></label>
+        <div class=" col-sm-6">
+            <input class="btn btn-default" id="submit" name="submit" type="submit" value="{{ submit_name }}">
+            <a href="{{ url }}" class="btn btn-default">返回</a>
+{#            <a href="{{ url }}" onclick="window.history.go(-1);" class="btn btn-default">返回</a>#}
+        </div>
+    </div>
+{% endmacro %}
+
+<!-- 脚本执行页面, ajax按钮 -->
+
+<!-- 自定义按钮 -->
+{#{% macro render_submit(url) %}#}
+{#    <div class="form-group">#}
+{#        <label class="control-label col-sm-2" for=""></label>#}
+{#        <div class=" col-sm-6">#}
+{#            <input class="btn btn-default" id="submit" name="submit" type="submit" value="提交">#}
+{#            <a href="{{ url }}" class="btn btn-default">返回</a>#}
+{#            <a href="{{ url }}" onclick="window.history.go(-1);" class="btn btn-default">返回</a>#}
+{#        </div>#}
+{#    </div>#}
+{#{% endmacro %}#}

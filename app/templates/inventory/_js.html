@@ -1,0 +1,80 @@
+<script>
+    $(function () {
+        // 设备ID
+        $('#hostid').addClass('digits');
+        $('#port').attr('min', 1);
+        $('#port').attr('max', 999999);
+
+        // 外IP地址
+        $('#oob_ip').addClass('ip');
+        {#
+        // 设备类型
+        $('#type').val('{{ inventory.type }}');
+        // 资产标签
+        $('#asset_tag').val('{{ inventory.asset_tag }}');
+        // 设备ID
+        $('#hostid').val('{{ host.hostid }}');
+        // 设备名称
+        $('#name').val('{{ inventory.name }}');
+        // 操作系统
+        $('#os').val('{{ inventory.os }}');
+        // 操作系统简写
+        $('#os_short').val('{{ inventory.os_short }}');
+        // 系统位数
+        $('#os_digits').val('{{ inventory.software }}');
+        // 操作系统描述
+        $('#os_full').val('{{ inventory.os_full }}');
+        // Mac地址
+        $('#mac_address').val('{{ inventory.macaddress_a }}');
+        // 序列号
+        $('#serial_no').val('{{ inventory.serialno_a }}');
+        // 主机网络
+        $('#host_networks').val('{{ inventory.host_networks }}');
+        // 主机子网掩码
+        $('#host_netmask').val('{{ inventory.host_netmask }}');
+        // 主机路由
+        $('#host_router').val('{{ inventory.host_router }}');
+        // 外IP地址
+        $('#oob_ip').val('{{ inventory.oob_ip }}');
+        // 外子网掩码
+        $('#oob_netmask').val('{{ inventory.oob_netmask }}');
+        // 外路由
+        $('#oob_router').val('{{ inventory.oob_router }}');
+        // 购买日期
+        $('#date_hw_purchase').val('{{ inventory.date_hw_purchase }}');
+        // 安装日期
+        $('#date_hw_install').val('{{ inventory.date_hw_install }}');
+        // 过保日期
+        $('#date_hw_expiry').val('{{ inventory.date_hw_expiry }}');
+        // 退役日期
+        $('#date_hw_decomm').val('{{ inventory.date_hw_decomm }}');
+        // 详细位置
+        $('#location').val('{{ inventory.location }}');
+        // 备注
+        $('#notes').val('{{ inventory.notes }}');
+                 #}
+
+
+
+        // 设置购买日期弹出日期框
+        $('#date_hw_purchase').datetimepicker({
+            language: "zh-CN",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            format: "yyyy-mm-dd"
+        });
+
+        // 插入分割线
+        $('#type').parent().parent().before('<div class="page-header"><h3>设备信息</h3></div>')
+        $('#used').parent().parent().after('<div class="page-header"><h3>系统信息</h3></div>')
+        $('#oob_router').parent().parent().after('<div class="page-header"><h3>硬件信息</h3></div>')
+
+    });
+    $("form").validate();
+
+</script>

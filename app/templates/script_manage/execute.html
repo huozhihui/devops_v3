@@ -1,0 +1,126 @@
+{% extends "extends/base_page.html" %}
+{#{% import "bootstrap/wtf.html" as wtf %}#}
+{% block page_content %}
+    <form action="" id="myform" method="post" class="form form-horizontal min-h200" enctype="multipart/form-data"
+          role="form"
+          novalidate="novalidate">
+        <!-- 多选框, 主机 -->
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">选择主机</label>
+            <span class="red fl">*</span>
+            <div class=" col-sm-6">
+                <select class="chosen-select" name="hosts" multiple data-placeholder=" " tabindex="1">
+                    <option value=""></option>
+                    {% for h in hosts %}
+                        <option value="{{ h.id }}"
+                                {% if h.id in select_host_ids %}selected{% endif %}>{{ h.ip }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        {% for var in script_manage.variables %}
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="name">{{ var.name }}</label>
+                <span class="red fl">*</span>
+                <div class=" col-sm-6">
+                    <input class="form-control" placeholder="{{ var.notes }}" id="{{ var.name }}" name="{{ var.name }}"
+                           required="" type="text"
+                           value=""
+                           aria-required="true">
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for=""></label>
+            <div class=" col-sm-6">
+                {% import 'macros/render_btn.html' as macros %}
+                {{ macros.render_load_btn('执行') }}
+                {#                <input class="btn btn-default" id="submit" name="submit" type="submit" value="执行">#}
+                {{ macros.render_default_btn('返回', 'script_manage.index') }}
+            </div>
+        </div>
+
+    </form>
+
+    <!-- 加载遮罩 -->
+    <div id="reload" onclick="alert('正在执行任务,请稍等......')">
+        {#        <img src="{{ url_for('static', filename = 'loading.gif') }}" width="50" height="50">#}
+    </div>
+
+    <!-- 显示任务执行结果 -->
+    <div id="show_result"></div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            // 初始化, 设置主机为多选框
+            $(".chosen-select").chosen({
+                max_selected_options: 100,
+                {#            placeholder_text: ' ',#}
+                no_results_text: "没有找到"
+            });
+
+            // 初始化, 设置遮罩为隐藏
+            $('#reload').hide();
+        })
+
+
+        // 点击执行按钮后,执行任务
+        $('#load').on('click', function () {
+            data = {};
+            if (!valid_form(data)) {
+                return false;
+            }
+            var $this = $(this);
+            $this.button('loading');
+            // 加载遮罩层
+            $('#reload').show();
+            $.ajax({
+                url: '/script_manage/ajax_execute_task/' + '{{ script_manage.id }}',
+                method: "POST",
+                data: data,
+                success: function (response) {
+                    $this.button('reset');
+                    $('#reload').hide();
+                    if (response) {
+                        $('#show_result').html(response);
+                    } else {
+                        $('#show_result').html("服务器异常, 请联系管理员!");
+                        $('#show_result').css('color', 'red');
+                    }
+                }
+            })
+            ;
+        });
+
+        function valid_form(data) {
+            flag = true;
+            $('input[aria-required="true"]').each(function () {
+                if ($(this).val() == '') {
+                    flag = false;
+                } else {
+                    data[$(this).attr('name')] = $(this).val();
+                }
+            });
+
+            // 判断是否选择主机
+            host = $('select[name=hosts]').val();
+            if (host == null) {
+                flag = false;
+            } else {
+                data['hosts'] = JSON.stringify(host);
+            }
+
+            if (flag == false) {
+                $('.flash_msg').html("请选择主机并填写所有变量!");
+                $('.alert-danger').addClass('show');
+            }
+            return flag;
+        }
+    </script>
+{% endblock %}

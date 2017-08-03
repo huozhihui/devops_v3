@@ -1,0 +1,96 @@
+{% extends "extends/base_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_header %}
+    <div class="page-header">
+        <h3>任务编排</h3>
+    </div>
+{% endblock %}
+{% block page_content %}
+    <form action="" id="myform" method="post" class="form form-horizontal" role="form" novalidate="novalidate">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">隶属于(作业)</label>
+            <div class=" col-sm-6">
+                <select class="form-control" id="type" name="type">
+                    <option value="0"></option>
+                    {% for hw in homeworks %}
+                        <option value="{{ hw.id }}">{{ hw.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <!-- 多选框 -->
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">应用于(主机)</label>
+            <div class=" col-sm-6">
+                <select class="chosen-select" multiple data-placeholder=" " tabindex="1">
+                    <option value=""></option>
+                    <option value="10.43.4.10">10.43.4.10</option>
+                    <option value="10.43.4.10">10.43.4.100</option>
+                    <option value="Zabbix Server">Zabbix Server</option>
+                    <option value="zabbix-agent">zabbix-agent</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">选择组件</label>
+            <div class=" col-sm-6">
+                <select id='component_id' name="component" multiple='multiple'>
+                    {% for com in components %}
+                        <option value="{{ com.id }}">{{ com.name }}</option>
+                    {% endfor %}
+                    <option value='elem_1'>Nginx</option>
+                    <option value='elem_2'>Mysql</option>
+                    <option value='elem_4'>Ftp</option>
+                    <option value='elem_100'>Docker</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">设置组件变量</label>
+            {#            <label class="control-label col-sm-2" for="name"></label>#}
+            <div class=" col-sm-6">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>组件</th>
+                        <th>名称</th>
+                        <th>值</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Mysql</td>
+                        <td>username</td>
+                        <td>
+                            <input class="form-control" id="name" name="name" type="text" value="" aria-required="true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mysql</td>
+                        <td>password</td>
+                        <td>
+                            <input class="form-control" id="name" name="name" type="text" value="" aria-required="true">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        {#        <div class="form-group">#}
+        {#            <label class="control-label col-sm-2" for="name">主机</label>#}
+        {#            <div class=" col-sm-6">#}
+        {#                <input class="form-control CommonNameCN" id="name" name="name" required="" type="text" value=""#}
+        {#                       aria-required="true">#}
+        {#            </div>#}
+        {#        </div>#}
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% include 'homework/_js_create_task.html' %}
+{% endblock %}

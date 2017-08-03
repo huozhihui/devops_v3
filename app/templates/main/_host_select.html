@@ -1,0 +1,6 @@
+<select class="form-control min-wp20 ml10" id="select-group" name="type" required=""
+        aria-required="true">
+    {% for host in hosts %}
+        <option value="{{ host.hostid }}">{{ host.name }}</option>
+    {% endfor %}
+</select>

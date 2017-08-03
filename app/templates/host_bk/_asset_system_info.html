@@ -1,0 +1,57 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#system_info" aria-expanded="true"
+               class="">系统信息</a>
+        </h4>
+    </div>
+    <div id="system_info" class="panel-collapse collapse in" aria-expanded="true">
+        <div class="panel-body">
+            <!-- 系统信息 -->
+            <div style="width: 50%;">
+
+                <div class="form-group fs12">
+                    <label>系统种类</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.os_short }}">
+                    <p class="help-block">操作系统简写, 如: Centos、Ubuntu、Redhat等等.</p>
+                </div>
+                <div class="form-group fs12">
+                    <label>操作系统</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.os }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>操作系统描述</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.os_full }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>Mac地址A</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.macaddress_a }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>Mac地址B</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.macaddress_b }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>软件应用程序A</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.software_app_a }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>软件应用程序B</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.software_app_b }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>软件应用程序C</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.software_app_c }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>软件应用程序D</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.software_app_d }}">
+                </div>
+                <div class="form-group fs12">
+                    <label>软件应用程序E</label>
+                    <input class="form-control fs12 ht28" value="{{ inventory.software_app_e }}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

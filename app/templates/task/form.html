@@ -1,0 +1,53 @@
+{% extends "extends/base_page.html" %}
+{% block page_content %}
+    <form action="" id="myform" method="post" class="form form-horizontal" role="form" novalidate="novalidate">
+        {{ form.csrf_token }}
+        {% import 'macros/render_field.html' as macros %}
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">隶属于(作业)</label>
+            <div class=" col-sm-6">
+                <select class="form-control" id="type" name="type">
+                    <option value="0"></option>
+                    {% for hw in homeworks %}
+                        <option value="{{ hw.id }}"
+                                {% if hw.id == homework_id %}selected{% endif %}>{{ hw.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">选择组件</label>
+            <div class=" col-sm-6">
+                <select id='component_id' name="component" multiple='multiple'>
+                    {% for com in components %}
+                        <option value="{{ com.id }}">{{ com.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        {{ macros.render_field(form.notes) }}
+
+{#        <div class="form-group">#}
+{#            <label class="control-label col-sm-2" for="notes">备注</label>#}
+{#            <div class="col-sm-6">#}
+{#                <textarea class="form-control" id="notes" name="notes"></textarea>#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for=""></label>
+            <div class=" col-sm-6">
+                <input class="btn btn-default" id="submit" name="submit" type="submit" value="保存">
+                <a href="{{ url_for('task.homework_index') }}" class="btn btn-default">返回任务列表</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% include 'task/_js.html' %}
+{% endblock %}

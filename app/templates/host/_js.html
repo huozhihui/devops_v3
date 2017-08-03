@@ -1,0 +1,17 @@
+<script>
+    $(function () {
+        // 名称校验
+        $('#username').addClass('valid_letter_num');
+        $('#username').attr('maxlength', 20);
+        $('#password').addClass('valid_letter_num');
+        $('#password').attr('maxlength', 20);
+        // IP
+        $('#ip').addClass('ip');
+
+        // 端口
+        $('#port').attr('min', 1);
+        $('#port').attr('max', 65535);
+
+    });
+    $("form").validate();
+</script>

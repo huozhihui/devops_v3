@@ -1,0 +1,18 @@
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        if (window.WebSocket == undefined) {
+            alert('浏览器不支持Web Socket');
+            return false
+        }
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect', function () {
+            socket.emit('connect_event', {method: 'ws_problem_update', data: {}});
+        });
+
+
+        // 更新表数据
+        socket.on('celery_result', function (data) {
+            console.log(data)
+        });
+    })
+</script>

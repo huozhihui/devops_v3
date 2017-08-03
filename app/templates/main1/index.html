@@ -1,0 +1,52 @@
+{% extends "extends/base_page.html" %}
+{% block page_header %}
+    <!-- 下拉框 -->
+    <div class="page-header">
+        <div class="form-inline">
+            <h3>云平台:
+                <select class="form-control min-wp20 ml10" id="select-group" name="type" required=""
+                        aria-required="true">
+                    {% for group in hostgroups %}
+                        <option value="{{ group.groupid }}">{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </h3>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+    {#    {% include 'main/row1.html' %}#}
+    {#    {% include 'main/row2.html' %}#}
+    {#    {% include 'main/row1.html' %}#}
+    {#    {% include 'main/row1.html' %}#}
+    {#    <div class="page-header"></div>#}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            $('#select-group').change(function () {
+                groupid = $(this).val();
+                $.ajax({
+                    url: "/ajax_get_hosts/" + groupid,
+                    method: "get",
+                    success: function (response) {
+                        output(response)
+                    }
+                });
+            })
+        })
+    </script>
+    <!-- 仪表 -->
+    {#    {% include 'main/_cpu_and_memory_percent.html' %}#}
+    {#    {% include 'main/_memory.html' %}#}
+    {#    {% include 'main/_trigger.html' %}#}
+    {#    {% include 'main/_host_count.html' %}#}
+    {#    {% include 'main/_monitor.html' %}#}
+
+    {#    {% include 'main/_ss_cpu_percent.html' %}#}
+    {#    {% include 'main/_ss_disk_percent.html' %}#}
+    {#    {% include 'main/_ss_memory_percent.html' %}#}
+{% endblock %}

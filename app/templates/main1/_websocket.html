@@ -1,0 +1,25 @@
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        if (window.WebSocket == undefined) {
+            alert('浏览器不支持Web Socket');
+            return false
+        }
+{#        var socket = io.connect('http://127.0.0.1:5001');#}
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+
+        socket.on('connect', function () {
+            socket.emit('connect_event', {data: 'connected'});
+        });
+
+        socket.on('memory_used', function (msg) {
+            $('#log').append('<br>' + $('<div/>').text('Received #' + ': ' + msg.data).html());
+        });
+
+    });
+
+    function output(msg) {
+        console.log(msg);
+    }
+
+</script>

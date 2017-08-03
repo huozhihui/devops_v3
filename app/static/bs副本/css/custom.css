@@ -1,0 +1,41 @@
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+h3{
+    font-size: 20px;
+}
+
+body {
+    background-color: #fff;
+}
+
+.page-header {
+    margin: 0 0 10px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #eee;
+}
+
+.warning-bg {
+    background-color: #FFC859;
+}
+
+.average-bg {
+    background-color: #FFA059;
+}
+
+.high-bg {
+    background-color: #E97659;
+}
+
+.disaster-bg {
+    background-color: #E45959
+}
+
+.ms-container{
+    width: 100%;
+}
+
+.no_border>tbody>tr>td{
+    border-top: 0px;
+}

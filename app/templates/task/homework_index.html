@@ -1,0 +1,120 @@
+{% extends "extends/base_table.html" %}
+{% block page_content %}
+    <div class="panel panel-default">
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+            {% import 'macros/render_btn.html' as macros %}
+            <div class="dataTable_wrapper">
+                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <thead>
+                    <tr>
+                        <th width="10%">序号</th>
+                        <th width="20%">组件</th>
+                        <th width="20%">IP</th>
+                        <th width="20%">备注</th>
+                        <th width="10%">状态</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in objects %}
+                        <tr>
+                            <td>{{ obj.id }}</td>
+                            <td>{{ obj.get_components() }}</td>
+                            <td>{{ obj.get_ips() }}</td>
+                            <td>{{ obj.notes }}</td>
+                            <td>
+                                {% if obj.is_configured() %}
+                                    <span class="green">已配置, 待执行</span>
+                                {% else %}
+                                    <span class="red">未配置</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ macros.render_dialog_btn('配置', 'task.configure', obj.id) }}
+                                {{ macros.render_btn('执行', 'task.execute', obj.id) }}
+                                {#                        {{ macros.render_edit_btn('task.edit', obj.id) }}#}
+                                {#                        {{ macros.render_btn('变量', 'component.edit', obj.id) }}#}
+                                {#                        {{ macros.render_btn('文件', 'component.edit', obj.id) }}#}
+                                {{ macros.render_del_btn('task.delete', obj.id) }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+            {% include "includes/show_dialog.html" %}
+            {{ macros.render_add_btn('task.new') }}
+            {{ macros.render_default_btn('全部执行','task.new') }}
+        </div>
+    </div>
+
+    <!-- 执行结果 -->
+    <div class="panel panel-default">
+        <div class="panel-heading">执行结果</div>
+        <div class="panel-body">
+            {% for obj in objects %}
+                <div style="border-bottom: 1px solid #eee" class="mb5 pb5">
+                    <b>Task1 &nbsp;&nbsp;[组件:{{ obj.get_components() }}]</b>
+                </div>
+                <table class="">
+                    <tr>
+                        <td class="p5 red">192.168.1.105:</td>
+                        <td class="p5 green">ok: 3</td>
+                        <td class="p5 blue">changed: 2</td>
+                        <td class="p5 red">failed: 1</td>
+                        <td class="p5">unreachable: 0</td>
+                        <td class="p5 red">mkdir: 无法创建目录\"/home/huo/aa\": 文件已存在</td>
+                    </tr>
+                    <tr>
+                        <td class="p5 red">192.168.1.1:</td>
+                        <td class="p5">ok: 0</td>
+                        <td class="p5">changed: 0</td>
+                        <td class="p5">failed: 0</td>
+                        <td class="p5 red">unreachable: 1</td>
+                        <td class="p5 red">Failed to connect to the host via ssh: OpenSSH_6.2p2, OSSLShim 0.9.8r 8 Dec 2011\ndebug</td>
+                    </tr>
+                </table>
+{#                <div>#}
+{#                    <span class="red">192.168.1.105:</span>&nbsp;&nbsp;#}
+{#                    <span class="green">ok: 3</span> &nbsp;&nbsp;#}
+{#                    <span class="blue">changed: 2</span> &nbsp;&nbsp;#}
+{#                    <span class="red">failed: 1</span> &nbsp;&nbsp;#}
+{#                    <span class="">unreachable: 0</span> &nbsp;&nbsp;#}
+{#                    <span class="red">mkdir: 无法创建目录\"/home/huo/aa\": 文件已存在</span> &nbsp;&nbsp;#}
+{#                </div>#}
+{#                <div>#}
+{#                    <span class="red">192.168.1.1:</span>&nbsp;&nbsp;#}
+{#                    <span class="">ok: 0</span> &nbsp;&nbsp;#}
+{#                    <span class="">changed: 0</span> &nbsp;&nbsp;#}
+{#                    <span class="">failed: 0</span> &nbsp;&nbsp;#}
+{#                    <span class="red">unreachable: 1</span> &nbsp;&nbsp;#}
+{#                    <span class="red">Failed to connect to the host via ssh: OpenSSH_6.2p2, OSSLShim 0.9.8r 8 Dec 2011\ndebug</span>#}
+{#                    &nbsp;&nbsp;#}
+{#                </div>#}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            // 当弹出框后,设置主机为多选
+            $('#myModal').on('shown.bs.modal', function (e) {
+                $(".chosen-select").chosen({
+                    max_selected_options: 100,
+                    {#            placeholder_text: ' ',#}
+                    no_results_text: "没有找到"
+                });
+
+                {#                if ({{ select_ips }}) {#}
+                {#                    console.log('abd')#}
+                {#                    $(".chosen-select").val({{ select_ips }}).trigger("chosen:updated");#}
+                {#                }#}
+            })
+        })
+    </script>
+{% endblock %}

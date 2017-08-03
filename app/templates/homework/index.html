@@ -1,0 +1,33 @@
+{% extends "extends/base_table.html" %}
+{% block table_content %}
+    {% import 'macros/render_btn.html' as macros %}
+    <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr>
+                <th width="10%">序号</th>
+                <th width="30%">名称</th>
+                <th width="40%">备注</th>
+                <th width="20%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in objects %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ obj.name }}</td>
+                    <td>{{ obj.notes }}</td>
+                    <td>
+                        {#                        {{ macros.render_btn('任务编排', 'homework.create_task', obj.id) }}#}
+                        {{ macros.render_btn('任务列表', 'homework.tasklist', obj.id) }}
+                        {{ macros.render_edit_btn('homework.edit', obj.id) }}
+                        {{ macros.render_del_btn('homework.delete', obj.id) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- /.table-responsive -->
+    {{ macros.render_add_btn('homework.new') }}
+{% endblock %}

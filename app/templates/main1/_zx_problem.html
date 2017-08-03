@@ -1,0 +1,58 @@
+<script>
+    $(function () {
+        $('#container-host-problem').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '报警分类'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    '警告',
+                    '一般严重',
+                    '严重',
+                    '灾难'
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '台数'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    // pointPadding: 0.2,
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true, // dataLabels设为true
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: '物理机',
+                data: [2, 5, 0, 0]
+            }, {
+                name: '虚机',
+                color: '#90ed7d',
+                data: [3, 10, 1, 0]
+            }]
+        });
+    });
+</script>

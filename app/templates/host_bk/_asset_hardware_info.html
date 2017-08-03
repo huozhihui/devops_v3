@@ -1,0 +1,67 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#hardware" class="collapsed">硬件信息</a>
+        </h4>
+    </div>
+    <div id="hardware" class="panel-collapse collapse" aria-expanded="false">
+        <div class="panel-body">
+            <!-- 硬件信息 -->
+            <div class="form-group fs12">
+                <label>机器类型</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.type }}">
+                {#                <p class="help-block">类型.</p>#}
+            </div>
+            <div class="form-group fs12">
+                <label>类型描述</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.type_full }}">
+            </div>
+            <div class="form-group fs12">
+                <label>资产标签</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.asset_tag }}">
+            </div>
+            <div class="form-group fs12">
+                <label>序列号A</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.serialno_a }}">
+            </div>
+            {#            <div class="form-group fs12">#}
+            {#                <label>序列号B</label>#}
+            {#                <input class="form-control fs12 ht28" value="{{ inventory.type }}">#}
+            {#            </div>#}
+            <div class="form-group fs12">
+                <label>硬件架构</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.hw_arch }}">
+            </div>
+
+            {#            <div class="form-group fs12">#}
+            {#                <label>部署状态</label>#}
+            {#                <input class="form-control fs12 ht28" value="{{ inventory.type }}">#}
+            {#            </div>#}
+            <div class="form-group fs12">
+                <label>硬件购买日期</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.date_hw_purchase }}">
+            </div>
+            <div class="form-group fs12">
+                <label>硬件安装日期</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.date_hw_install }}">
+            </div>
+            <div class="form-group fs12">
+                <label>硬件维修过期日期</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.date_hw_expiry }}">
+            </div>
+            <div class="form-group fs12">
+                <label>硬件退役日期</label>
+                <input class="form-control fs12 ht28" value="{{ inventory.date_hw_decomm }}">
+            </div>
+
+            {#            <div class="form-group fs12">#}
+            {#                <label>硬件</label>#}
+            {#                <input class="form-control fs12 ht28" value="{{ inventory.type }}">#}
+            {#            </div>#}
+            {#            <div class="form-group fs12">#}
+            {#                <label>硬件描述</label>#}
+            {#                <input class="form-control fs12 ht28" value="{{ inventory.type }}">#}
+            {#            </div>#}
+        </div>
+    </div>
+</div>

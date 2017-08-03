@@ -1,0 +1,27 @@
+{% extends "extends/base_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_content %}
+    {{ request.url }}
+    <form action="" id="myform" method="post" class="form form-horizontal" enctype="multipart/form-data" role="form"
+          novalidate="novalidate">
+        {{ form.csrf_token }}
+        {% import 'macros/render_field.html' as macros %}
+        {{ macros.render_field(form.name) }}
+        {{ macros.render_field(form.type) }}
+        {{ macros.render_field(form.version) }}
+        {{ macros.render_field(form.os) }}
+        {{ macros.render_field(form.content) }}
+        {% include 'includes/_field_var.html' %}
+        {{ macros.render_field(form.files) }}
+        {{ macros.render_field(form.templates) }}
+        {{ macros.render_field(form.notes) }}
+
+        {% import 'macros/render_submit.html' as macros %}
+        {{ macros.render_submit(url_for('component.index')) }}
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% include 'component/_js.html' %}
+{% endblock %}

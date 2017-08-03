@@ -1,0 +1,21 @@
+<tr>
+    <td>{{ i }}</td>
+    <td>
+        <input class="form-control" id="var_name_{{ i }}" name="var_name[]" type="text"
+               value="">
+    </td>
+    <td>
+        <input class="form-control" id="var_value_{{ i }}" name="var_value[]" type="text"
+               value="">
+    </td>
+    <td>
+        <label class="radio-inline">
+            <input type="radio" name="var_type_{{ i }}" id="var_type_default_{{ i }}" value="default"
+                   checked="">默认
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="var_type_{{ i }}" id="var_type_dynamic_{{ i }}"
+                   value="dynamic">动态
+        </label>
+    </td>
+</tr>

@@ -1,0 +1,49 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}{% endblock %}
+{% block styles %}
+    {{ super() }}
+    {% include 'includes/load_css.html' %}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    {% include 'includes/load_js.html' %}
+    <script>
+        $(function () {
+            $('a[data-del=true]').each(function () {
+                $(this).on('click', function () {
+                    return confirm('确认删除?');
+                });
+            })
+        })
+        // 给所有界面备注调整显示
+        $('#notes').attr({'rows': 5});
+    </script>
+{% endblock %}
+
+{% block navbar %}
+    {% include 'includes/menu.html' %}
+{% endblock %}
+
+<!-- 页面内容,继承自bootstrap,content名称不能改变 -->
+{% block content %}
+    <div class="container">
+        {% import 'macros/render_flash.html' as macros %}
+        <!-- 后端提示错误 -->
+        {% for message in get_flashed_messages(with_categories=True) %}
+            {% if message[0] == 'message' %}
+                {{ macros.render_flash(message[1]) }}
+            {% else %}
+                {{ macros.render_flash(message[1], message[0]) }}
+            {% endif %}
+        {% endfor %}
+
+        <!-- 前端提示错误,隐藏 -->
+        {{ macros.render_hide_flash() }}
+        {{ macros.render_hide_flash('danger') }}
+
+        {% block base_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+
+

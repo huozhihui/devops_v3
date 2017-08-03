@@ -1,0 +1,27 @@
+<div>
+    <div class="page-header">
+        <h3>执行结果</h3>
+    </div>
+    <div id="result" class="scroll">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>IP</th>
+                <th>状态</th>
+                <th>结果</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for key, res in results.items() %}
+                <tr class="{% if res['status'] == 'changed' %}green{% else %}red{% endif %}">
+                    <td>{{ key }}</td>
+                    <td>{{ res['status'] }}</td>
+                    <td>{{ res['output'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

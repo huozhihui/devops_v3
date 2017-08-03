@@ -1,0 +1,15 @@
+<!-- 下拉框 -->
+{% macro render_select(label_name, select_name, objects, option) %}
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="type">{{ label_name }}</label>
+        <div class="col-sm-6">
+            <select class="form-control" id="{{ select_name }}_id" name="{{ select_name }}">
+                {% for obj in objects %}
+                    <option value="{{ obj[option[0]] }}">{{ obj[option[1]] }}</option>
+                {% endfor %}
+            </select>
+            <label class="error" for="type" style="display:none"> </label>
+        </div>
+    </div>
+{% endmacro %}
+

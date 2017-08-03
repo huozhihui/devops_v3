@@ -1,0 +1,38 @@
+{#{% for problem in rs %}#}
+{#    i['triggerid'], i['value'], i['description'], i['priority']#}
+{#    #}
+{#    {% for key, value in inventory.items() %}#}
+{#        <div class="form-group">#}
+{#            <label>{{ key }}</label>#}
+{#            <input class="form-control" value="{{ value }}">#}
+{#            <p class="help-block">Example block-level help text here.</p>#}
+{#        </div>#}
+{#    {% endfor %}#}
+{#{% endfor %}#}
+<div class="panel-body">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>严重性</th>
+                <th>状态</th>
+                <th>时间</th>
+                <th>历史时间</th>
+                <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for pb in rs %}
+                <tr>
+                    <td class="{{ priority_color[pb['priority']] }}">{{ priority_name[pb['priority']] }}</td>
+                    <td class="red">{{ status[pb['value']] }}</td>
+                    <td>{{ pb['lastchange'] }}</td>
+                    <td>{{ moment(current_time).fromNow(refresh=True) }}</td>
+                    <td>{{ pb['description']|replace('{HOST.NAME}', host_name) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- /.table-responsive -->
+</div>

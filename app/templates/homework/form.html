@@ -1,0 +1,16 @@
+{% extends "extends/base_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_bread_crumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('.index') }}">作业管理</a></li>
+        <li class="active">{{ header }}</li>
+    </ol>
+{% endblock %}
+{% block page_content %}
+    {{ wtf.quick_form(form, id="myform", form_type="horizontal", horizontal_columns=('sm', 2, 6)) }}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% include 'homework/_js_form.html' %}
+{% endblock %}

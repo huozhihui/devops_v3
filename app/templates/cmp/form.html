@@ -1,0 +1,38 @@
+{% extends "extends/base_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_content %}
+    <form action="" id="myform" method="post" class="form form-horizontal" enctype="multipart/form-data" role="form"
+          novalidate="novalidate">
+        {{ form.csrf_token }}
+        {% import 'macros/render_field.html' as macros %}
+        {% import 'macros/render_select.html' as ms_select %}
+
+        {{ macros.render_field(form.name) }}
+        {{ ms_select.render_select("主机组", "group", select_groups, ['id', 'name']) }}
+        {{ ms_select.render_select("主机", "host") }}
+        {{ macros.render_field(form.notes) }}
+
+        {% import 'macros/render_submit.html' as macros %}
+        {{ macros.render_submit(url_for('cmp.index')) }}
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            // 点击组名下拉框时, 显示主机下拉框
+            $('#group_id').change(function () {
+                groupid = $(this).val();
+                $.ajax({
+                    url: "/cmp/ajax_get_hosts/" + groupid,
+                    method: "get",
+                    success: function (response) {
+                        $("#host_id").empty();
+                        $("#host_id").append(response)
+                    }
+                });
+            })
+        })
+    </script>
+{% endblock %}

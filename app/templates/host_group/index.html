@@ -1,0 +1,59 @@
+{% extends "extends/base_table.html" %}
+{% block table_content %}
+    {% import 'macros/render_btn.html' as macros %}
+    <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for h in objects %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ h.name }}</td>
+                    <td>
+                        {{ macros.render_btn('编辑', 'host_group.edit', h.id) }}
+                        {{ macros.render_btn('删除', 'host_group.delete', h.id) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        {{ macros.render_add_btn('host_group.new') }}
+        {{ macros.render_load_btn('更新数据') }}
+        <div id='update_data' style="display: inline; color: green;"></div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $('#load').on('click', function () {
+            var $this = $(this);
+            $this.button('loading');
+            $.ajax({
+                url: '/host_group/ajax_update_group',
+                method: "get",
+                success: function (response) {
+                    $this.button('reset');
+                    if (response.code == '500') {
+                        $('#update_data').css('color', 'red');
+                    }
+                    $('#update_data').html(response.msg);
+                },
+                error: function (response) {
+                    $this.button('reset');
+                    $("#update_data").html("更新失败," + response.status + " ," + response.statusText);
+                    $('#update_data').css('color', 'red');
+                }
+            });
+            return false;
+        });
+
+    </script>
+{% endblock %}

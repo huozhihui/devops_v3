@@ -1,0 +1,161 @@
+{#{% for key, value in inventory.data.items() %}#}
+{#    <div class="form-group">#}
+{#        <label>{{ key }}</label>#}
+{#        <input class="form-control" value="{{ value }}">#}
+        {#            <p class="help-block">Example block-level help text here.</p>#}
+{#    </div>#}
+{#{% endfor %}#}
+
+{##}
+{#<div class="panel-group" id="accordion">#}
+{#    {% include 'host/_asset_system_info.html' %}#}
+{#    {% include 'host/_asset_hardware_info.html' %}#}
+{#    {% include 'host/_asset_supplier_info.html' %}#}
+{#    {% include 'host/_asset_other_info.html' %}#}
+{#</div>#}
+
+
+{% extends "extends/base_page.html" %}
+{% block page_bread_crumbs %}
+    <ol class="breadcrumb">
+        <li><a href="#">主机</a></li>
+        <li><a href="#">10.43.4.85</a></li>
+        <li class="active">资产信息</li>
+    </ol>
+{% endblock %}
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    系统信息
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body scroll">
+                    <!-- 系统信息 -->
+                    <div class="form-group fs12">
+                        <label>系统种类</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.os_short }}">
+                        <p class="help-block">操作系统简写, 如: Centos、Ubuntu、Redhat等等.</p>
+                    </div>
+                    <div class="form-group fs12">
+                        <label>操作系统</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.os }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>操作系统描述</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.os_full }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>Mac地址A</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.macaddress_a }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>Mac地址B</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.macaddress_b }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>软件应用程序A</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.software_app_a }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>软件应用程序B</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.software_app_b }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>软件应用程序C</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.software_app_c }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>软件应用程序D</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.software_app_d }}">
+                    </div>
+                    <div class="form-group fs12">
+                        <label>软件应用程序E</label>
+                        <input class="form-control fs12 ht28" value="{{ inventory.software_app_e }}">
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Pill Tabs
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#home-pills" data-toggle="tab">Home</a>
+                        </li>
+                        <li><a href="#profile-pills" data-toggle="tab">Profile</a>
+                        </li>
+                        <li><a href="#messages-pills" data-toggle="tab">Messages</a>
+                        </li>
+                        <li><a href="#settings-pills" data-toggle="tab">Settings</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="home-pills">
+                            <h4>Home Tab</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                laborum.</p>
+                        </div>
+                        <div class="tab-pane fade" id="profile-pills">
+                            <h4>Profile Tab</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                laborum.</p>
+                        </div>
+                        <div class="tab-pane fade" id="messages-pills">
+                            <h4>Messages Tab</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                laborum.</p>
+                        </div>
+                        <div class="tab-pane fade" id="settings-pills">
+                            <h4>Settings Tab</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                laborum.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+
+{% endblock %}

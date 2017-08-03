@@ -1,0 +1,56 @@
+{% extends 'extends/dialog_page.html' %}
+{% block body %}
+    <form action="{{ url_for('task.save_configure') }}" id="myform" method="post" class="form form-horizontal"
+          role="form" novalidate="novalidate">
+        <input type="hidden" name="task_id" value="{{ id }}">
+        <!-- 多选框 -->
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">应用于(主机)</label>
+            <div class=" col-sm-6">
+                <select class="chosen-select" name="hosts" multiple data-placeholder=" " tabindex="1">
+                    <option value=""></option>
+                    {% for h in hosts %}
+                        <option value="{{ h.id }}" {% if h.id in select_host_ids %}selected{% endif %}>{{ h.ip }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">设置组件变量</label>
+            {#            <label class="control-label col-sm-2" for="name"></label>#}
+            <div class=" col-sm-6">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>值</th>
+                        <th>隶属于</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for v in variables %}
+                        <tr>
+                            <td>{{ v.name }}</td>
+                            <td>
+                                {% if variables_dict %}
+                                    <input class="form-control" id="name" name="{{ v.id }}" type="text"
+                                           value="{{ variables_dict[v.component.name][v.name] }}">
+                                {% else %}
+                                    <input class="form-control" id="name" name="{{ v.id }}" type="text"
+                                           value="{{ v.value }}">
+                                {% endif %}
+                            </td>
+                            <td>{{ v.component.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <input class="btn btn-default" id="application_submit" name="commit" type="submit" value="保存">
+        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+    </form>
+{% endblock %}
