@@ -21,7 +21,7 @@ class TestZabbixHostApi(unittest.TestCase):
             for res in h.applications:
                 print "应用ID: {} 应用名: {} ".format(res.applicationid, res.name)
 
-    # @unittest.skip('skip get items.')
+    @unittest.skip('skip get items.')
     def test_get_items(self):
         hosts = host.get_items(10295)
         # hosts = host.get(filter={'hostid': 11027}, selectItems="extend")
@@ -29,6 +29,18 @@ class TestZabbixHostApi(unittest.TestCase):
         #     print h.hostid, h.name, h.items
             # for res in h.items:
             #     print "监控ID: {} 监控名: {} ".format(res.itemid, res.name)
+
+    def test_get_inventory(self):
+        hosts = host.get_inventory()
+        for h in hosts:
+            print h.hostid, h.name
+            print "=========================="
+            print h.inventory
+            for inventory in h.inventory:
+                for key, value in inventory.__dict__.items():
+                    print "%20s: %s" % (key, value)
+            # inventory = h.inventory[0]
+            # print inventory.data
 
 
 

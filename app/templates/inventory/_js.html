@@ -57,7 +57,7 @@
 
 
         // 设置购买日期弹出日期框
-        $('#date_hw_purchase').datetimepicker({
+        date_json = {
             language: "zh-CN",
             weekStart: 1,
             todayBtn: 1,
@@ -67,7 +67,11 @@
             minView: 2,
             forceParse: 0,
             format: "yyyy-mm-dd"
-        });
+        };
+        $('#date_hw_purchase').datetimepicker(date_json);
+        $('#date_hw_install').datetimepicker(date_json);
+        $('#date_hw_expiry').datetimepicker(date_json);
+        $('#date_hw_decomm').datetimepicker(date_json);
 
         // 插入分割线
         $('#type').parent().parent().before('<div class="page-header"><h3>设备信息</h3></div>')

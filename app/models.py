@@ -7,6 +7,7 @@ from flask_login import UserMixin
 from . import db
 from . import login_manager
 from datetime import datetime
+from collections import OrderedDict
 
 
 class Base(db.Model):
@@ -14,6 +15,9 @@ class Base(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
+    def __getitem__(self, item):
+        return self.__dict__[item]
 
 
 class CommonName(db.Model):
@@ -120,11 +124,11 @@ class Inventory(Base):
     __tablename__ = 'inventorys'
     hostid = db.Column(db.Integer, default=0)
     type = db.Column(db.String(50))
-    brand = db.Column(db.String(50))
+    brand = db.Column(db.String(100))
     asset_tag = db.Column(db.String(50))
     name = db.Column(db.String(50))
     used = db.Column(db.TEXT())
-    os = db.Column(db.String(50))
+    os = db.Column(db.String(100))
     os_short = db.Column(db.String(50))
     os_digits = db.Column(db.String(50))
     os_full = db.Column(db.TEXT())
@@ -138,10 +142,14 @@ class Inventory(Base):
     oob_netmask = db.Column(db.String(50))
     oob_router = db.Column(db.String(50))
 
-    date_hw_purchase = db.Column(db.DATE())
-    date_hw_install = db.Column(db.DATE())
-    date_hw_expiry = db.Column(db.DATE())
-    date_hw_decomm = db.Column(db.DATE())
+    # date_hw_purchase = db.Column(db.DATE())
+    # date_hw_install = db.Column(db.DATE())
+    # date_hw_expiry = db.Column(db.DATE())
+    # date_hw_decomm = db.Column(db.DATE())
+    date_hw_purchase = db.Column(db.String(50))
+    date_hw_install = db.Column(db.String(50))
+    date_hw_expiry = db.Column(db.String(50))
+    date_hw_decomm = db.Column(db.String(50))
 
     cabinet = db.Column(db.String(100))
     rack = db.Column(db.String(100))
@@ -153,6 +161,8 @@ class Inventory(Base):
     contact_email = db.Column(db.String(50))
     notes = db.Column(db.TEXT())
     hosts = db.relationship('Host', backref='inventory', lazy='dynamic')
+    inventory_updates = db.relationship('InventoryUpdate', backref='inventory', lazy='dynamic')
+
 
     def __repr__(self):
         return '<Inventory %r>' % self.name
@@ -160,9 +170,37 @@ class Inventory(Base):
     def to_dict(self):
         return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 
+    # def match_zabbix(self):
+    #     common = ["type", "asset_tag", "name", "os", "os_short", "os_digits", "os_full",
+    #               "mac_address", "serial_no", "host_networks", "host_netmask", "host_router",
+    #               "oob_ip", "oob_netmask", "oob_router", "date_hw_purchase", "date_hw_install",
+    #               "date_hw_expiry", "date_hw_decomm", "location", "notes"]
+    #
+    #     without = ["brand", "used", "cabinet", "rack", "department", "contact", "contact_tel",
+    #                "contact_phone", "contact_email"]
+    #
+    #     tmp_dict = OrderedDict()
+    #     for key in common:
+    #         tmp_dict[key] = key
+    #     tmp_dict.update(dict(os_digits="software", mac_address="macaddress_a", serial_no="serialno_a"))
+    #     return tmp_dict
+
+    # 获取机器所有IP
+    def ips(self):
+        return ','.join([h.ip for h in self.hosts])
+
+    # 获取机器状态名称
+    def status_name(self):
+        return ''
+
+    # 获取机器状态颜色
+    def status_color(self):
+        return ''
+
 
 class InventoryUpdate(Base):
     __tablename__ = 'inventory_updates'
+    inventory_id = db.Column(db.Integer, db.ForeignKey('inventorys.id'))
     content = db.Column(db.TEXT())
 
     def __repr__(self):
@@ -177,6 +215,10 @@ class HostGroup(Base):
 
     hosts = db.relationship('Inventory', secondary=mid_host_group_inventorys,
                             backref=db.backref('host_groups', lazy='dynamic'))
+
+
+    def __repr__(self):
+        return '<HostGroup %r>' % self.name
 
 
 # 定义作业模型
@@ -353,6 +395,10 @@ class Cmp(Base):
     cmp_items = db.relationship('CmpItem', backref='cmp', lazy='dynamic')
 
 
+    def __repr__(self):
+        return '<Cmp %r>' % self.name
+
+
 # 定义平台管理的展示项目模块
 class CmpItem(Base):
     __tablename__ = 'cmp_items'
@@ -362,3 +408,6 @@ class CmpItem(Base):
     value = db.Column(db.String(50))
     notes = db.Column(db.TEXT())
     cmp_id = db.Column(db.Integer, db.ForeignKey('cmps.id'))
+
+    def __repr__(self):
+        return '<CmpItem %r>' % self.name

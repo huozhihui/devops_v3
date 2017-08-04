@@ -16,33 +16,43 @@
             </tr>
             </thead>
             <tbody>
-            {% for h in hosts %}
+            {% for obj in objects %}
                 <tr>
-                    <td>{{ h.inventory.type }}</td>
-                    <td>{{ h.inventory.asset_tag }}</td>
+                    <td>{{ obj.type }}</td>
+                    <td>{{ obj.asset_tag }}</td>
                     <td>
-                        <a href="{{ url_for('inventory.edit', id=h.id) }}">
-                            {{ h.inventory.name }}
+                        <a href="{{ url_for('inventory.edit', id=obj.id) }}">
+                            {{ obj.name or obj.host }}
                         </a>
                     </td>
-                    <td title="{{ h.inventory.os }}">{{ h.inventory.os|truncate(50) }}</td>
-                    <td>{{ h.ip }}</td>
-                    <td class="{{ h.status_color }}">{{ h.status_name }}</td>
-                    <td></td>
+                    <td title="{{ obj.os }}">{% if obj.os %}{{ obj.os|truncate(50) }}{% endif %}</td>
+                    <td>{{ obj.ips() }}</td>
+                    <td class="{{ obj.status_color() }}">{{ obj.status_name() }}</td>
+                    <td>{{ obj.location }}</td>
                     <td>
-                        {{ macros.render_edit_btn('inventory.edit', h.id) }}
                         {#                        {{ macros.render_del_btn('inventory.delete', h.id) }}#}
+                        {{ macros.render_btn('资产变更', 'inventory.edit', obj.id) }}
+                        {{ macros.render_btn('变更记录', 'inventory_update.index', obj.id) }}
 
-                        {#                        <a href="{{ url_for('inventory.edit', id=h.hostid) }}"#}
-                        {#                           class="btn btn-outline btn-primary btn-xs">详细#}
-                        {#                        </a>#}
-                        <a href="#" class="btn btn-outline btn-primary btn-xs">信息变更记录</a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-    <!-- /.table-responsive -->
-    {{ macros.render_add_btn('host.new') }}
+    <div>
+        {#        {{ macros.render_add_btn('host.new') }}#}
+        {{ macros.render_load_btn('更新数据') }}
+        <div id='update_data' style="display: inline; color: green;"></div>
+    </div>
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+    {% include 'includes/js/_update_data.html' %}
+    <script>
+        $(function () {
+            update_data_from_zabbix('/inventory/ajax_update_inventory')
+        })
+    </script>
+{% endblock %}
+

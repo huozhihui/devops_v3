@@ -12,8 +12,12 @@ class Base(object):
         if isinstance(self.data, dict):
             self.__dict__.update(**self.data)
 
+    def __getitem__(self, item):
+        return self.__dict__[item]
+
 
 from zabbix_host import ZabbixHost
+from zabbix_inventory import ZabbixInventory
 from zabbix_hostgroup import ZabbixHostGroup
 from zabbix_application import ZabbixApplication
 from zabbix_item import ZabbixItem
@@ -28,20 +32,23 @@ def login_zabbix(func):
         zabbix_server_url = setting.SERVER_URL
         zabbix_username = setting.USERNAME
         zabbix_password = setting.PASSWORD
-        try:
-            zapi = ZabbixAPI(zabbix_server_url, timeout=30)
-            zapi.login(zabbix_username, zabbix_password)
-            print 'Zabbix Server connection is successful!'
-        except Exception, e:
-            print e.message
-            print 'Zabbix Server connection timed out!'
-            zapi = None
-
-        if zapi is None:
-            return []
-            # return {'result': {}, 'error': 'Zabbix Server connection timed out!'}
-        else:
-            kwargs.update(zapi=zapi)
-            return func(*args, **kwargs)
+        zapi = ZabbixAPI(zabbix_server_url, timeout=30)
+        zapi.login(zabbix_username, zabbix_password)
+        kwargs.update(zapi=zapi)
+        return func(*args, **kwargs)
+        # try:
+        #     zapi = ZabbixAPI(zabbix_server_url, timeout=30)
+        #     zapi.login(zabbix_username, zabbix_password)
+        #     print 'Zabbix Server connection is successful!'
+        # except Exception, e:
+        #     print e.message
+        #     print 'Zabbix Server connection timed out!'
+        #     zapi = None
+        #
+        # if zapi is None:
+        #     return []
+        # else:
+        #     kwargs.update(zapi=zapi)
+        #     return func(*args, **kwargs)
 
     return wrapper

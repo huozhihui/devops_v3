@@ -1,5 +1,7 @@
 # sample dir
 sample/
+backup/
+.idea/
 # database
 
 # Byte-compiled / optimized / DLL files

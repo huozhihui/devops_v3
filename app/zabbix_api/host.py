@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from base import login_zabbix
-from base import ZabbixHost, ZabbixHostGroup, ZabbixApplication, ZabbixItem
+from base import ZabbixHost, ZabbixHostGroup, ZabbixApplication, ZabbixItem, ZabbixInventory
 
 
 # 获取所有主机
@@ -26,6 +26,14 @@ def get(**kwargs):
 def filter(**kwargs):
     return get(filter=kwargs)
 
+# 获取资产信息
+def get_inventory(**kwargs):
+    result = get(filter=kwargs, selectInventory="extend")
+    for host in result:
+        if isinstance(host.inventory, dict):
+            temp = [ZabbixInventory(host.inventory)]
+            host.inventory = temp
+    return result
 
 # 获取主机组
 def get_groups(**kwargs):

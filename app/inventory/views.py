@@ -1,22 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from flask import render_template, request, session, flash, redirect, url_for
+from flask import render_template, request, session, flash, redirect, url_for, jsonify
 from flask_login import login_required
-from datetime import datetime
-import copy
 import json
 from collections import OrderedDict
 
 from . import inventory
 from .forms import InventoryForm
-from ..models import Host, Inventory, InventoryUpdate
+from ..models import Host, HostGroup, Inventory, InventoryUpdate
 from .. import db
-# from .. import zabbix
+from .. import zabbix_api
+from .. import celery_manage
+
+MODULE_NAME = u"主机"
 
 
 @inventory.route('/index', methods=['GET'])
 @login_required
 def index():
+    header = u'管理'
     objects = Inventory.query.all()
     return _render('index', locals())
 
@@ -25,8 +27,7 @@ def index():
 @login_required
 def edit(id):
     header = u'编辑'
-    host = Host.query.get_or_404(id)
-    inventory = host.inventory
+    inventory = Inventory.query.get_or_404(id)
     form = InventoryForm(obj=inventory)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -36,13 +37,14 @@ def edit(id):
             # tmp_dict = copy.deepcopy(form.data)
             tmp_dict.pop('csrf_token', None)
             tmp_dict.pop('submit', None)
-            tmp_dict['host_id'] = host.id
+            tmp_dict['inventory_id'] = inventory.id
             if not inventory:
-                if save_inventory(tmp_dict):
-                    flash(u'主机{}资产信息添加成功!'.format(host.ip))
-                    return redirect(url_for("host.index"))
-                else:
-                    flash(u'主机{}资产信息添加失败,请联系管理员!'.format(host.ip), 'danger')
+                pass
+                # if save_inventory(tmp_dict):
+                #     flash(u'主机{}资产信息添加成功!'.format(host.ip))
+                #     return redirect(url_for("host.index"))
+                # else:
+                #     flash(u'主机{}资产信息添加失败,请联系管理员!'.format(host.ip), 'danger')
             else:
                 # 如果资产记录存在, 则对比表单提交与数据库中各字段存储数据是否一致
                 # 针对不一致的字段,将该字段的名称存储起来, 以便于信息变更的历史查询
@@ -55,14 +57,14 @@ def edit(id):
                         update_data[label_name] = [old_val, new_value]
                 try:
                     form.populate_obj(inventory)
-                    flash(u'主机{}资产信息编辑成功!'.format(host.ip))
+                    flash(u'主机{}资产信息编辑成功!'.format(inventory.name))
                     if update_data:
                         if not save_inventory_update(update_data):
-                            flash(u'主机{}的信息变更存储失败!'.format(host.ip), 'danger')
-                    return redirect(url_for("host.index"))
+                            flash(u'主机{}的信息变更存储失败!'.format(inventory.name), 'danger')
+                    return redirect(url_for(".index"))
                 except Exception, e:
                     print e.message
-                    flash(u'主机{}资产信息编辑失败,请联系管理员!'.format(host.ip), 'danger')
+                    flash(u'主机{}资产信息编辑失败,请联系管理员!'.format(inventory.name), 'danger')
 
     return _render("edit", locals())
 
@@ -90,6 +92,19 @@ def save_inventory_update(json_data):
         print e.message
         db.session.rollback()
         return False
+
+
+# 将zabbix服务器主机组数据存入本地
+@inventory.route('/ajax_update_inventory', methods=['GET'])
+@login_required
+def ajax_update_inventory():
+    import_inventory = celery_manage.views.import_inventory_data()
+    import_hostgroup_inventory = celery_manage.views.import_hostgroup_inventory()
+    if import_inventory and import_hostgroup_inventory:
+        msg, code = u"更新完成!", 200
+    else:
+        msg, code = u'更新失败, 请联系管理员!', 500
+    return jsonify({'msg': msg, 'code': code})
 
 
 # @inventory.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -179,6 +194,7 @@ def save_inventory_update(json_data):
 
 
 def _render(content, kwargs={}):
-    kwargs.update(title_name=u'资产')
+    new_header = MODULE_NAME + kwargs.get('header', '')
+    kwargs.update(title_name=MODULE_NAME, header=new_header)
     html = "inventory/%s.html" % content
     return render_template(html, **kwargs)

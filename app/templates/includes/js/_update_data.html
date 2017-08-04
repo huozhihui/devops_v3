@@ -1,0 +1,25 @@
+<script>
+    function update_data_from_zabbix(url) {
+        $('#load').on('click', function () {
+            var $this = $(this);
+            $this.button('loading');
+            $.ajax({
+                url: url,
+                method: "get",
+                success: function (response) {
+                    $this.button('reset');
+                    if (response.code == '500') {
+                        $('#update_data').css('color', 'red');
+                    }
+                    $('#update_data').html(response.msg);
+                },
+                error: function (response) {
+                    $this.button('reset');
+                    $("#update_data").html("更新失败," + response.status + " ," + response.statusText);
+                    $('#update_data').css('color', 'red');
+                }
+            });
+            return false;
+        });
+    }
+</script>

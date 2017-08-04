@@ -133,3 +133,5 @@ function add_var_row(url) {
 function del_var_row() {
     $('#var_table tbody tr:nth-last-child(2)').remove();
 }
+
+// 更新数据
