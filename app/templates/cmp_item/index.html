@@ -9,18 +9,20 @@
                 {#                <th width="60%">名称</th>#}
                 {#                <th width="30%">操作</th>#}
                 <th>序号</th>
+                <th>监控模版</th>
                 <th>名称</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            {% for h in objects %}
+            {% for obj in objects %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ h.name }}</td>
+                    <td>{{ obj.cmp.name }}</td>
+                    <td>{{ obj.name }}</td>
                     <td>
-                        {{ macros.render_btn('编辑', 'host_group.edit', h.id) }}
-                        {{ macros.render_btn('删除', 'host_group.delete', h.id) }}
+{#                        {{ macros.render_btn('编辑', 'host_group.edit', obj.id) }}#}
+                        {{ macros.render_btn('删除', 'cmp_item.delete', obj.id) }}
                     </td>
                 </tr>
             {% endfor %}

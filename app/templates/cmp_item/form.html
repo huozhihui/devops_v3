@@ -1,10 +1,82 @@
 {% extends "extends/base_page.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% block page_bread_crumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('cmp.index') }}">监控模版管理</a></li>
+        <li class="active">{{ cmp.name }}</li>
+    </ol>
+{% endblock %}
 {% block page_content %}
-    {{ wtf.quick_form(form, id="myform", form_type="horizontal", horizontal_columns=('sm', 2, 6)) }}
+    <form action="" id="myform" method="post" class="form form-horizontal" role="form"
+          novalidate="novalidate">
+        {{ form.csrf_token }}
+        {% import 'macros/render_field.html' as macros %}
+        {% import 'macros/render_select.html' as ms_select %}
+        {{ macros.render_field(form.name) }}
+
+        {{ ms_select.render_select("应用集", "application") }}
+        {{ ms_select.render_select("监控项", "item") }}
+        {{ macros.render_field(form.notes) }}
+
+        {% import 'macros/render_submit.html' as macros %}
+        {{ macros.render_submit(url_for('cmp.index')) }}
+    </form>
 {% endblock %}
 
 {% block scripts %}
     {{ super() }}
-    {% include 'host/_js.html' %}
+    <script>
+        $(function () {
+            set_application_select();
+
+
+            // 点击组名下拉框时, 显示主机下拉框
+            $('#application_id').change(function () {
+                set_item_select();
+            });
+
+        });
+
+        // 设置应用集下拉框
+        function set_application_select() {
+            $.ajax({
+                url: "/cmp_item/ajax_get_applications/" + {{ cmp.id }},
+                method: "get",
+                success: function (response) {
+                    if (response.code == '500') {
+                        $('#application_error').show();
+                        $('#application_error').text(response.msg);
+                    } else {
+                        $("#application_id").empty();
+                        $("#application_id").append(response.msg);
+                        {% if "edit" in request.url_rule.rule %}
+                            $("#application_id").val({{ cmp_item.applicaitonid }});
+                        {% endif %}
+                    }
+                }
+            })
+        }
+
+        // 设置监控项下拉框
+        function set_item_select() {
+            applicationid = $("#application_id").val();
+            item_select = $("#item_id");
+            $.ajax({
+                url: "/cmp_item/ajax_get_items/" + applicationid,
+                method: "get",
+                success: function (response) {
+                    if (response.code == '500') {
+                        $('#item_error').show();
+                        $('#item_error').text(response.msg);
+                    } else {
+                        item_select.empty();
+                        item_select.append(response.msg);
+                        {% if "edit" in request.url_rule.rule %}
+                            item_select.val({{ cmp_item.itemid }});
+                        {% endif %}
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}

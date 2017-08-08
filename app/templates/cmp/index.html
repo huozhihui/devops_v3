@@ -16,8 +16,9 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ obj.name }}</td>
                     <td>
-{#                        {{ macros.render_btn('编辑', 'cmp.edit', obj.id) }}#}
-{#                        {{ macros.render_btn('删除', 'cmp.delete', obj.id) }}#}
+                        {{ macros.render_btn('添加监控项目', 'cmp_item.new', obj.id) }}
+                        {{ macros.render_btn('编辑', 'cmp.edit', obj.id) }}
+                        {{ macros.render_btn('删除', 'cmp.delete', obj.id) }}
                     </td>
                 </tr>
             {% endfor %}

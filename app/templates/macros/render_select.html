@@ -8,7 +8,7 @@
                     <option value="{{ obj[option[0]] }}">{{ obj[option[1]] }}</option>
                 {% endfor %}
             </select>
-            <label class="error" for="type" style="display:none"> </label>
+            <label id="{{ select_name }}_error" class="error" for="type" style="display:none"> </label>
         </div>
     </div>
 {% endmacro %}
