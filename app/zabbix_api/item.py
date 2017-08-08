@@ -29,6 +29,17 @@ def filter(**kwargs):
 def filter_with_hostids(hostids, **kwargs):
     return __get(hostids=hostids, filter=kwargs)
 
+# 判断监控项是否可读
+@login_zabbix
+def is_readable(itemid, **kwargs):
+    # 139884 139775 139776 212711 212712
+    zapi = kwargs.get('zapi')
+    kwargs.pop('zapi', None)
+
+    result = zapi.item.isreadable(itemid)
+    return result
+
+
 
 # 根据hostid获取主机
 # def get_hostid(hostid):
