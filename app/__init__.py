@@ -10,7 +10,6 @@ from config import config
 from flask_login import LoginManager
 # from flask_navigation import Navigation
 from flask_socketio import SocketIO
-# from celery import Celery
 from flask_celery import Celery
 
 bootstrap = Bootstrap()
@@ -18,7 +17,6 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
-
 socketio = SocketIO()
 celery = Celery()
 
@@ -43,6 +41,7 @@ def create_app(config_name):
     socketio.init_app(app)
     celery.init_app(app)
 
+    # 定时任务
     from .celery_manage import celery_manage as celery_manage_blueprint
     app.register_blueprint(celery_manage_blueprint, url_prefix='/celery_manage')
 
@@ -118,3 +117,4 @@ def create_app(config_name):
 
     # 附加路由和自定义的错误页面
     return app
+

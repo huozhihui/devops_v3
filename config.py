@@ -1,8 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+from datetime import timedelta
+from celery.schedules import crontab
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
@@ -16,9 +19,29 @@ class Config:
     # MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
+
+
+    # 定时任务
     CELERY_BROKER_URL = 'redis://localhost:6379',
     CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-
+    # CELERY_TIMEZONE = 'Asia/Shanghai'
+    CELERYBEAT_SCHEDULE = {
+        'import_zabbix_data': {
+            'task': 'import_zabbix_data',
+            'schedule': timedelta(minutes=5)
+            # 'schedule': 5.0
+        },
+    }
+    # app.config['CELERYBEAT_SCHEDULE'] = {
+    #     'play-every-morning': {
+    #         'task': 'tasks.play_task',
+    #         'schedule': crontab(hour=9, minute=0)
+    #     },
+    #     'pause-later': {
+    #         'task': 'tasks.pause_task',
+    #         'schedule': crontab(hour=9, minute=10)
+    #     }
+    # }
 
     @staticmethod
     def init_app(app):
