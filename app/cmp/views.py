@@ -10,7 +10,7 @@ from forms import CmpForm
 from ..models import Cmp, HostGroup, Inventory, Host
 from .. import db
 
-MODULE_NAME = u"监控模版"
+MODULE_NAME = u"监控平台"
 
 
 @cmp.route('/index', methods=['GET'])
@@ -83,8 +83,13 @@ def edit(id):
 @cmp.route('/ajax_get_hosts/<int:id>', methods=['GET'])
 @login_required
 def ajax_get_hosts(id):
-    objects = HostGroup.query.get(id).hosts
-    return _render('_host_option', locals())
+    try:
+        objects = HostGroup.query.get(id).hosts
+        msg, code = _render('_host_option', locals()), 200
+    except Exception, e:
+        print e
+        msg, code = "获取主机失败!", 500
+    return jsonify({'msg': msg, 'code': code})
 
 
 @cmp.route('/delete/<int:id>', methods=['GET'])

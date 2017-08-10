@@ -33,28 +33,34 @@
             {% endif %}
 
 
-            // 点击组名下拉框时, 显示主机下拉框
+            // 点击组名下拉框时, 修改主机下拉框
             $('#group_id').change(function () {
-                groupid = $(this).val();
+                group_id = $(this).val();
                 group_name = $(this).find("option:selected").text();
                 // 修改名称为组名
                 $('#name').val(group_name);
-                set_host_select(groupid);
+                set_host_select(group_id);
             });
 
         });
 
-        // 设置主机信息
+        // 修改主机下拉框options
         function set_host_select(groupid) {
+            host_select = $('#host_id');
             $.ajax({
                 url: "/cmp/ajax_get_hosts/" + groupid,
                 method: "get",
                 success: function (response) {
-                    $("#host_id").empty();
-                    $("#host_id").append(response);
-                    {% if "edit" in request.url_rule.rule %}
-                        $("#host_id").val({{ cmp.hostid }});
-                    {% endif %}
+                    if (response.code == '500') {
+                        $('#host_error').show();
+                        $('#host_error').text(response.msg);
+                    } else {
+                        host_select.empty();
+                        host_select.append(response.msg);
+                        {% if "edit" in request.url_rule.rule %}
+                            host_select.val({{ cmp.hostid }});
+                        {% endif %}
+                    }
                 }
             });
         }
