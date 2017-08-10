@@ -4,14 +4,16 @@ from flask import render_template, request, session, flash, redirect, url_for
 from flask_login import login_required
 import json
 from . import inventory_update
-from ..models import InventoryUpdate, Host
+from ..models import InventoryUpdate, Inventory
+
+MODULE_NAME = u"资产变更"
 
 
 @inventory_update.route('/index/<int:id>', methods=['GET'])
 @login_required
 def index(id):
     header = u'记录'
-    host = Host.query.get(id)
+    inventory = Inventory.query.get_or_404(id)
     data = []
     objects = InventoryUpdate.query.all()
     for obj in objects:
@@ -24,6 +26,7 @@ def index(id):
 
 
 def _render(content, kwargs={}):
-    kwargs.update(title_name=u'资产变更')
+    new_header = MODULE_NAME + kwargs.get('header', '')
+    kwargs.update(title_name=MODULE_NAME, header=new_header)
     html = "inventory_update/%s.html" % content
     return render_template(html, **kwargs)

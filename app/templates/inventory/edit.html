@@ -1,10 +1,7 @@
 {% extends "extends/base_page.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block page_bread_crumbs %}
-    <ol class="breadcrumb">
-        <li><a href="{{ url_for('host.index') }}">主机管理</a></li>
-        <li class="active">{{ host.ip }}</li>
-    </ol>
+    {% include 'inventory/_bread.html' %}
 {% endblock %}
 {% block page_header %}{% endblock %}
 {% block page_content %}

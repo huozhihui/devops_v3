@@ -14,7 +14,8 @@ class InventoryForm(FlaskForm):
     brand = StringField(u'设备品牌')
     asset_tag = StringField(u'资产标签')
     hostid = IntegerField(u'设备ID', default=0)
-    name = StringField(u'设备名称')
+    name = StringField(u'主机名')
+    alias = StringField(u'别名')
     used = TextAreaField(u'用途或描述')
     os = StringField(u'操作系统')
     os_short = StringField(u'操作系统简写')
@@ -48,6 +49,4 @@ class InventoryForm(FlaskForm):
     contact_phone = StringField(u'手机')
     contact_email = StringField(u'Email')
     notes = TextAreaField(u'备注')
-
-    # name = StringField('What is your name?', validators=[Required()])
     submit = SubmitField(u'提交')

@@ -1,9 +1,6 @@
 {% extends "extends/base_table.html" %}
 {% block page_bread_crumbs %}
-    <ol class="breadcrumb">
-        <li><a href="{{ url_for('host.index') }}">主机管理</a></li>
-        <li class="active">{{ host.ip }}</li>
-    </ol>
+    {% include 'inventory/_bread.html' %}
 {% endblock %}
 {% block table_content %}
     {% import 'macros/render_btn.html' as macros %}
