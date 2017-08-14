@@ -19,8 +19,6 @@ class Config:
     # MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
-
-
     # 定时任务
     CELERY_BROKER_URL = 'redis://localhost:6379',
     CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -31,7 +29,12 @@ class Config:
             'schedule': timedelta(minutes=5)
             # 'schedule': 5.0
         },
+        'update_item_value_data': {
+            'task': 'import_zabbix_data',
+            'schedule': timedelta(minutes=3)
+        }
     }
+
     # app.config['CELERYBEAT_SCHEDULE'] = {
     #     'play-every-morning': {
     #         'task': 'tasks.play_task',

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from .. import celery
 from .. import zabbix_api, db
-from ..models import Inventory, InventoryUpdate, HostGroup
+from ..models import Inventory, InventoryUpdate, HostGroup, Cmp, CmpItem
 from collections import OrderedDict
 import json
 from datetime import datetime
@@ -11,7 +11,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 
-# 首先导入inventory
+# 导入主机、组和组管理数据
 @celery.task(name='import_zabbix_data')
 def import_zabbix_data():
     logger.info(u"开始导入主机数据......")
@@ -31,8 +31,38 @@ def import_zabbix_data():
         logger.error(e.message)
 
 
-# 首先导入inventory
-# @celery.task(name='import_inventory_data')
+# 导入监控项结果数据
+@celery.task(name='import_item_value_data')
+def update_item_value_data():
+    logger.info(u"开始导入主机数据......")
+    cmps = Cmp.query.all()
+    for cmp in cmps:
+        item_ids = [obj.itemid for obj in cmp.cmp_items]
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            results = zabbix_api.item.filter(itemid=item_ids)
+        except Exception, e:
+            logger.error(u"{} 从Zabbix获取{}的监控项目失败!".format(now, cmp.name))
+            logger.error(e.message)
+            continue
+
+        for res in results:
+            cmp_item = CmpItem.query.filter_by(itemid=res.itemid, cmp_id=cmp.id).first()
+            try:
+                history = zabbix_api.history.get(res.itemid, res.value_type)
+                if history:
+                    cmp_item.value = history[0].value
+            except Exception, e:
+                logger.error(u"{} 从Zabbix获取{}的监控项目{}的结果失败!".format(now, cmp.name, cmp_item.name))
+                logger.error(e.message)
+                continue
+        try:
+            db.session.commit()
+        except Exception, e:
+            logger.error(u"{} 更新{}的监控项目数值失败!".format(now, cmp.name))
+            db.session.rollback()
+
+
 def import_inventory_data():
     results = zabbix_api.host.get_inventory()
     for res in results:
@@ -71,7 +101,6 @@ def import_inventory_data():
 
 
 # 通过本地inventory的hostid导入hostgroup与inventory关系, 同时也导入hostgroup
-# @celery.task(name='import_hostgroup_inventory')
 def import_hostgroup_inventory():
     inventorys = Inventory.query.all()
     hostids = [obj.hostid for obj in inventorys]
