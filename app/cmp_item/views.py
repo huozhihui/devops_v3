@@ -6,7 +6,7 @@ from flask_login import login_required
 from . import cmp_item
 from .. import zabbix_api
 from forms import CmpItemForm
-from ..models import CmpItem, Cmp, Inventory
+from ..models import CmpItem, Cmp, Inventory, HostGroup
 from .. import db
 
 MODULE_NAME = u"监控项目"
@@ -20,6 +20,7 @@ def index():
     return _render('index', locals())
 
 
+# 从监控平台添加项目
 @cmp_item.route('/new/<int:id>', methods=['GET', 'POST'])
 @login_required
 def new(id):
@@ -28,38 +29,39 @@ def new(id):
     form = CmpItemForm()
     if request.method == "POST":
         if form.validate_on_submit():
-            print request.form
-            name = form.name.data
-            application_id = int(request.form.get('application'))
-            item_id = int(request.form.get('item'))
-            notes = form.notes.data
-            if CmpItem.query.filter_by(name=name, cmp_id=cmp.id).first():
-                flash(u'监控项目{}已存在, 添加失败!'.format(name), 'danger')
-                return _render('form', locals())
+            form_data = dict(hostid=int(request.form.get('host')),
+                             applicationid=int(request.form.get('application')),
+                             itemid=int(request.form.get('item')),
+                             name=form.name.data,
+                             notes=form.notes.data
+                             )
 
-            cmp_item = CmpItem(name=name,
-                               applicationid=application_id,
-                               itemid=item_id,
-                               notes=notes,
-                               cmp_id=cmp.id)
-            db.session.add(cmp_item)
-            try:
-                db.session.commit()
-                flash(u'监控项目{}添加成功!'.format(cmp_item.name))
-                # return redirect(url_for('.index'))
-            except Exception, e:
-                flash(u'监控项目{}添加失败, 请联系管理员!'.format(name), 'danger')
-                print e.message
-                db.session.rollback()
+            # 保存监控平台项目cmp_item表
+            form_data['cmp_id'] = cmp.id
+            if not save_cmp_item(cmp, form_data):
+                return _render('new', locals())
+
     return _render('form', locals())
 
 
-# 获取应用集列表
-@cmp_item.route('/ajax_get_applications/<int:cmp_id>', methods=['GET'])
+# 获取主机列表
+@cmp_item.route('/ajax_get_hosts/<int:id>', methods=['GET'])
 @login_required
-def ajax_get_applications(cmp_id):
-    cmp = Cmp.query.get_or_404(int(cmp_id))
-    hostid = Inventory.query.get_or_404(int(cmp.hostid)).hostid
+def ajax_get_hosts(id):
+    try:
+        objects = HostGroup.query.get(id).hosts
+        msg, code = _render('_host_option', locals()), 200
+    except Exception, e:
+        print e
+        msg, code = "获取主机失败!", 500
+    return jsonify({'msg': msg, 'code': code})
+
+
+# 获取应用集列表
+@cmp_item.route('/ajax_get_applications/<int:host_id>', methods=['GET'])
+@login_required
+def ajax_get_applications(host_id):
+    hostid = Inventory.query.get_or_404(host_id).hostid
     try:
         objects = zabbix_api.host.get_applications(hostid=hostid)[0].applications
         msg, code = _render('_application_option', locals()), 200
@@ -70,17 +72,20 @@ def ajax_get_applications(cmp_id):
 
 
 # 获取监控项列表
-@cmp_item.route('/ajax_get_items/<int:application_id>', methods=['GET'])
+@cmp_item.route('/ajax_get_items/<int:applicationid>', methods=['GET'])
 @login_required
-def ajax_get_items(application_id):
+def ajax_get_items(applicationid):
     try:
         objects = []
-        result_items = zabbix_api.application.get_items(application_id)[0].items
+        result_items = zabbix_api.application.get_items(applicationid)[0].items
         for res in result_items:
             history = zabbix_api.history.get(res.itemid, res.value_type)
             if len(history) > 0:
                 objects.append(res)
-        msg, code = _render('_item_option', locals()), 200
+        if len(objects) == 0:
+            msg, code = "可用监控项为空!", 300
+        else:
+            msg, code = _render('_item_option', locals()), 200
     except Exception, e:
         print e
         msg, code = "获取监控项失败!", 500
@@ -138,6 +143,63 @@ def delete(id):
     db.session.commit()
     flash(u'数据删除成功!')
     return redirect(url_for('.index'))
+
+
+# 从监控项目添加项目
+@cmp_item.route('/fast_new', methods=['GET', 'POST'])
+@login_required
+def fast_new():
+    header = u'添加'
+    form = CmpItemForm()
+    select_groups = HostGroup.query.all()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            cmp_data = dict(group_id=int(request.form.get('group')))
+            cmp_item_data = dict(hostid=int(request.form.get('host')),
+                                 applicationid=int(request.form.get('application')),
+                                 itemid=int(request.form.get('item')),
+                                 name=form.name.data,
+                                 notes=form.notes.data
+                                 )
+
+            # 保存监控平台cmp表
+            host_group = HostGroup.query.get(cmp_data['group_id'])
+            cmp = Cmp.query.filter_by(name=host_group.name).first()
+            if not cmp:
+                cmp = Cmp(name=host_group.name,
+                          groupid=host_group.id,
+                          )
+                db.session.add(cmp)
+                db.session.flush()
+
+            # 保存监控平台项目cmp_item表
+            cmp_item_data['cmp_id'] = cmp.id
+            if not save_cmp_item(cmp, cmp_item_data):
+                return _render('fast_new', locals())
+
+    return _render('fast_new', locals())
+
+
+# 保存监控项目方法
+def save_cmp_item(cmp, data):
+    name = data.get('name')
+    host_id = data.get('host_id')
+
+    if CmpItem.query.filter_by(name=name, hostid=host_id, cmp_id=cmp.id).first():
+        flash(u'监控项目{}已存在, 添加失败!'.format(name), 'danger')
+        return False
+
+    cmp_item = CmpItem(**data)
+    db.session.add(cmp_item)
+    try:
+        db.session.commit()
+        flash(u'监控项目{}添加成功!'.format(name))
+        return True
+    except Exception, e:
+        flash(u'监控项目{}添加失败, 请联系管理员!'.format(name), 'danger')
+        print e.message
+        db.session.rollback()
+        return False
 
 
 def _render(content, kwargs={}):

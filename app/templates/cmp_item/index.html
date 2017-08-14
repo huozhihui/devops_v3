@@ -5,12 +5,10 @@
         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
             <thead>
             <tr>
-                {#                <th width="10%">序号</th>#}
-                {#                <th width="60%">名称</th>#}
-                {#                <th width="30%">操作</th>#}
                 <th>序号</th>
                 <th>监控模版</th>
                 <th>名称</th>
+                <th>更新时间</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -20,8 +18,9 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ obj.cmp.name }}</td>
                     <td>{{ obj.name }}</td>
+                    <td>{{ obj.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                     <td>
-{#                        {{ macros.render_btn('编辑', 'host_group.edit', obj.id) }}#}
+                        {#                        {{ macros.render_btn('编辑', 'host_group.edit', obj.id) }}#}
                         {{ macros.render_btn('删除', 'cmp_item.delete', obj.id) }}
                     </td>
                 </tr>
@@ -30,35 +29,35 @@
         </table>
     </div>
     <div>
-        {{ macros.render_add_btn('host_group.new') }}
-        {{ macros.render_load_btn('更新数据') }}
-        <div id='update_data' style="display: inline; color: green;"></div>
+        {{ macros.render_add_btn('cmp_item.fast_new') }}
+        {#        {{ macros.render_load_btn('更新数据') }}#}
+        {#        <div id='update_data' style="display: inline; color: green;"></div>#}
     </div>
 {% endblock %}
 {% block scripts %}
     {{ super() }}
     <script>
-        $('#load').on('click', function () {
-            var $this = $(this);
-            $this.button('loading');
-            $.ajax({
-                url: '/host_group/ajax_update_group',
-                method: "get",
-                success: function (response) {
-                    $this.button('reset');
-                    if (response.code == '500') {
-                        $('#update_data').css('color', 'red');
-                    }
-                    $('#update_data').html(response.msg);
-                },
-                error: function (response) {
-                    $this.button('reset');
-                    $("#update_data").html("更新失败," + response.status + " ," + response.statusText);
-                    $('#update_data').css('color', 'red');
-                }
-            });
-            return false;
-        });
+        {#        $('#load').on('click', function () {#}
+        {#            var $this = $(this);#}
+        {#            $this.button('loading');#}
+        {#            $.ajax({#}
+        {#                url: '/host_group/ajax_update_group',#}
+        {#                method: "get",#}
+        {#                success: function (response) {#}
+        {#                    $this.button('reset');#}
+        {#                    if (response.code == '500') {#}
+        {#                        $('#update_data').css('color', 'red');#}
+        {#                    }#}
+        {#                    $('#update_data').html(response.msg);#}
+        {#                },#}
+        {#                error: function (response) {#}
+        {#                    $this.button('reset');#}
+        {#                    $("#update_data").html("更新失败," + response.status + " ," + response.statusText);#}
+        {#                    $('#update_data').css('color', 'red');#}
+        {#                }#}
+        {#            });#}
+        {#            return false;#}
+        {#        });#}
 
     </script>
 {% endblock %}

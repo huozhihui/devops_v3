@@ -8,6 +8,9 @@
         {% import 'macros/render_select.html' as ms_select %}
 
         {{ ms_select.render_select("主机组", "group", select_groups, ['id', 'name']) }}
+        {{ ms_select.render_select("主机", "host") }}
+        {{ ms_select.render_select("应用集", "application") }}
+        {{ ms_select.render_select("监控项", "item") }}
         {{ macros.render_field(form.name) }}
         {{ macros.render_field(form.notes) }}
 
@@ -18,25 +21,14 @@
 
 {% block scripts %}
     {{ super() }}
-    <script>
-        $(function () {
-            {% if "edit" in request.url_rule.rule %}
-                $('#group_id').val({{ cmp.groupid }});
-            {% endif %}
-
-            init_group_name();
-
-
-            // 点击组名下拉框时, 修改主机下拉框
-            $("#group_id").change(function () {
-                init_group_name();
-            });
-        });
-
-        // 获取组下拉框值,初始化host组
-        function init_group_name() {
-            var group_name = $('#group_id').find("option:selected").text();
-            $('#name').val(group_name);
-        }
-    </script>
+    {% include 'cmp_item/_js.html' %}
+{#    <script>#}
+{#        $(function () {#}
+{#            // 获取组下拉框值,初始化host组#}
+{#            set_host_select();#}
+{#            init_group_select();#}
+{#            init_host_select();#}
+{#            init_application_select();#}
+{#        });#}
+{#    </script>#}
 {% endblock %}

@@ -127,6 +127,7 @@ class Inventory(Base):
     brand = db.Column(db.String(100))
     asset_tag = db.Column(db.String(50))
     name = db.Column(db.String(50))
+    alias = db.Column(db.String(50))
     used = db.Column(db.TEXT())
     os = db.Column(db.String(100))
     os_short = db.Column(db.String(50))
@@ -162,7 +163,6 @@ class Inventory(Base):
     notes = db.Column(db.TEXT())
     hosts = db.relationship('Host', backref='inventory', lazy='dynamic')
     inventory_updates = db.relationship('InventoryUpdate', backref='inventory', lazy='dynamic')
-
 
     def __repr__(self):
         return '<Inventory %r>' % self.name
@@ -215,7 +215,6 @@ class HostGroup(Base):
 
     hosts = db.relationship('Inventory', secondary=mid_host_group_inventorys,
                             backref=db.backref('host_groups', lazy='dynamic'))
-
 
     def __repr__(self):
         return '<HostGroup %r>' % self.name
@@ -390,10 +389,8 @@ class Cmp(Base):
     __tablename__ = 'cmps'
     name = db.Column(db.String(30), unique=True)
     groupid = db.Column(db.Integer)
-    hostid = db.Column(db.Integer)
     notes = db.Column(db.TEXT())
     cmp_items = db.relationship('CmpItem', backref='cmp', lazy='dynamic')
-
 
     def __repr__(self):
         return '<Cmp %r>' % self.name
@@ -403,8 +400,10 @@ class Cmp(Base):
 class CmpItem(Base):
     __tablename__ = 'cmp_items'
     name = db.Column(db.String(30), unique=True)
+    hostid = db.Column(db.Integer)
     applicationid = db.Column(db.Integer)
     itemid = db.Column(db.Integer)
+    # value_type = db.Column(db.String(50))
     value = db.Column(db.String(50))
     notes = db.Column(db.TEXT())
     cmp_id = db.Column(db.Integer, db.ForeignKey('cmps.id'))

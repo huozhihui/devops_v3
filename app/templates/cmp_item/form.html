@@ -12,11 +12,11 @@
         {{ form.csrf_token }}
         {% import 'macros/render_field.html' as macros %}
         {% import 'macros/render_select.html' as ms_select %}
-        {{ macros.render_field(form.name) }}
-
+        {{ ms_select.render_select("主机", "host") }}
         {{ ms_select.render_select("应用集", "application") }}
         {{ ms_select.render_select("监控项", "item") }}
-{#        {{ macros.hidden_field(form.value_type) }}#}
+        {{ macros.render_field(form.name) }}
+        {#        {{ macros.hidden_field(form.value_type) }}#}
         {{ macros.render_field(form.notes) }}
 
         {% import 'macros/render_submit.html' as macros %}
@@ -26,73 +26,105 @@
 
 {% block scripts %}
     {{ super() }}
-    <script>
-        $(function () {
-            // 初始化应用集下拉框
-            set_application_select();
-
-            // 点击应用集下拉框, 初始化监控项下拉框
-            $('#application_id').change(function () {
-                set_item_select();
-            });
-
-            // 点击监控项下拉框, 初始化监控项值类型的文本框
-            $('#item_id').change(function () {
-                set_value_type_input();
-            });
-        });
-
-        // 设置应用集下拉框
-        function set_application_select() {
-            $.ajax({
-                url: "/cmp_item/ajax_get_applications/" + {{ cmp.id }},
-                method: "get",
-                success: function (response) {
-                    if (response.code == '500') {
-                        $('#application_error').show();
-                        $('#application_error').text(response.msg);
-                    } else {
-                        $("#application_id").empty();
-                        $("#application_id").append(response.msg);
-                        {% if "edit" in request.url_rule.rule %}
-                            $("#application_id").val({{ cmp_item.applicaitonid }});
-                        {% endif %}
-                    }
-                }
-            })
-        }
-
-        // 设置监控项下拉框
-        function set_item_select() {
-            applicationid = $("#application_id").val();
-            item_select = $("#item_id");
-            $.ajax({
-                url: "/cmp_item/ajax_get_items/" + applicationid,
-                method: "get",
-                success: function (response) {
-                    if (response.code == '500') {
-                        $('#item_error').show();
-                        $('#item_error').text(response.msg);
-                    } else {
-                        item_select.empty();
-                        item_select.append(response.msg);
-                        // 设置监控项值类型value_type
-                        {% if "edit" in request.url_rule.rule %}
-                            item_select.val({{ cmp_item.itemid }});
-                        {% endif %}
-                    }
-                }
-            })
-        }
-
-{#        function set_value_type_input() {#}
-{#            item_select = $("#item_id");#}
+    {% include 'cmp_item/_js.html' %}
+{#    <script>#}
+{#        $(function () {#}
+{#            // 获取组下拉框值,初始化host组#}
+{#            set_host_select();#}
+{#            init_group_select();#}
+{#            init_host_select();#}
+{#            init_application_select();#}
+{#        });#}
+{##}
+{#        // 修改主机下拉框options#}
+{#        function get_host_select() {#}
+{#            host_select = $('#host_id');#}
 {#            $.ajax({#}
-{#                url: "/cmp_item/ajax_get_value_type/" + item_select.val(),#}
+{#                url: "/cmp_item/ajax_get_host_select/",#}
 {#                method: "get",#}
 {#                success: function (response) {#}
+{#                    if (response.code == '500') {#}
+{#                        $('#host_error').show();#}
+{#                        $('#host_error').text(response.msg);#}
+{#                    } else {#}
+{#                        host_select.empty();#}
+{#                        host_select.append(response.msg);#}
+{#                        set_application_select();#}
+{#                        {% if "edit" in request.url_rule.rule %}#}
+{#                            host_select.val({{ cmp.hostid }});#}
+{#                        {% endif %}#}
+{#                    }#}
 {#                }#}
 {#            });#}
 {#        }#}
-    </script>
+{#    </script>#}
+    {#    <script>#}
+    {#        $(function () {#}
+    {#            // 初始化应用集下拉框#}
+    {#            set_application_select();#}
+    {##}
+    {#            // 点击应用集下拉框, 初始化监控项下拉框#}
+    {#            $('#application_id').change(function () {#}
+    {#                set_item_select();#}
+    {#            });#}
+    {##}
+    {#            // 点击监控项下拉框, 初始化监控项值类型的文本框#}
+    {#            $('#item_id').change(function () {#}
+    {#                set_value_type_input();#}
+    {#            });#}
+    {#        });#}
+    {##}
+    {#        // 设置应用集下拉框#}
+    {#        function set_application_select() {#}
+    {#            $.ajax({#}
+    {#                url: "/cmp_item/ajax_get_applications/" + {{ cmp.id }},#}
+    {#                method: "get",#}
+    {#                success: function (response) {#}
+    {#                    if (response.code == '500') {#}
+    {#                        $('#application_error').show();#}
+    {#                        $('#application_error').text(response.msg);#}
+    {#                    } else {#}
+    {#                        $("#application_id").empty();#}
+    {#                        $("#application_id").append(response.msg);#}
+    {#                        {% if "edit" in request.url_rule.rule %}#}
+    {#                            $("#application_id").val({{ cmp_item.applicaitonid }});#}
+    {#                        {% endif %}#}
+    {#                    }#}
+    {#                }#}
+    {#            })#}
+    {#        }#}
+    {##}
+    {#        // 设置监控项下拉框#}
+    {#        function set_item_select() {#}
+    {#            applicationid = $("#application_id").val();#}
+    {#            item_select = $("#item_id");#}
+    {#            $.ajax({#}
+    {#                url: "/cmp_item/ajax_get_items/" + applicationid,#}
+    {#                method: "get",#}
+    {#                success: function (response) {#}
+    {#                    if (response.code == '500') {#}
+    {#                        $('#item_error').show();#}
+    {#                        $('#item_error').text(response.msg);#}
+    {#                    } else {#}
+    {#                        item_select.empty();#}
+    {#                        item_select.append(response.msg);#}
+    {#                        // 设置监控项值类型value_type#}
+    {#                        {% if "edit" in request.url_rule.rule %}#}
+    {#                            item_select.val({{ cmp_item.itemid }});#}
+    {#                        {% endif %}#}
+    {#                    }#}
+    {#                }#}
+    {#            })#}
+    {#        }#}
+    {##}
+    {#        function set_value_type_input() {#}
+    {#            item_select = $("#item_id");#}
+    {#            $.ajax({#}
+    {#                url: "/cmp_item/ajax_get_value_type/" + item_select.val(),#}
+    {#                method: "get",#}
+    {#                success: function (response) {#}
+    {#                }#}
+    {#            });#}
+    {#        }#}
+    {#    </script>#}
 {% endblock %}

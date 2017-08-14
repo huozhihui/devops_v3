@@ -29,26 +29,20 @@ def new():
     select_groups = HostGroup.query.all()
     if request.method == "POST":
         if form.validate_on_submit():
-            cmp_name = form.name.data
-            cmp_groupid = int(request.form.get('group'))
-            cmp_hostid = int(request.form.get('host'))
-            cmp_notes = form.notes.data
-            if Cmp.query.filter_by(name=cmp_name).first():
-                flash(u'模版{}已存在, 添加失败!'.format(cmp_name), 'danger')
+            form_data = dict(name=form.name.data,
+                             groupid=int(request.form.get('group')),
+                             notes=form.notes.data
+                             )
+
+            if not save_cmp(form_data):
                 return _render('form', locals())
 
-            cmp = Cmp(name=cmp_name,
-                      groupid=cmp_groupid,
-                      hostid=cmp_hostid,
-                      notes=form.notes.data
-                      )
-            db.session.add(cmp)
             try:
                 db.session.commit()
-                flash(u'模版{}添加成功!'.format(cmp.name))
+                flash(u'监控平台{}添加成功!'.format(form_data['name']))
                 return redirect(url_for('.index'))
             except Exception, e:
-                flash(u'模版{}添加失败, 请联系管理员!'.format(cmp_name), 'danger')
+                flash(u'监控平台{}添加失败, 请联系管理员!'.format(form_data['name']), 'danger')
                 print e.message
                 db.session.rollback()
     return _render('form', locals())
@@ -64,32 +58,17 @@ def edit(id):
     if form.validate_on_submit():
         cmp_name = form.name.data
         cmp_groupid = int(request.form.get('group'))
-        cmp_hostid = int(request.form.get('host'))
         cmp_notes = form.notes.data
         exist_cmp = Cmp.query.filter_by(name=cmp_name).first()
         if exist_cmp and exist_cmp.id != cmp.id:
-            flash(u'模版{}已存在, 保存失败!'.format(cmp_name), 'danger')
+            flash(u'监控平台{}已存在, 保存失败!'.format(cmp_name), 'danger')
             return _render('form', locals())
         else:
             cmp.groupid = cmp_groupid
-            cmp.hostid = cmp_hostid
             form.populate_obj(cmp)
-            flash(u'模版{}编辑成功!'.format(cmp.name))
+            flash(u'监控平台{}编辑成功!'.format(cmp.name))
             return redirect(url_for(".index"))
     return _render("form", locals())
-
-
-# 获取主机列表
-@cmp.route('/ajax_get_hosts/<int:id>', methods=['GET'])
-@login_required
-def ajax_get_hosts(id):
-    try:
-        objects = HostGroup.query.get(id).hosts
-        msg, code = _render('_host_option', locals()), 200
-    except Exception, e:
-        print e
-        msg, code = "获取主机失败!", 500
-    return jsonify({'msg': msg, 'code': code})
 
 
 @cmp.route('/delete/<int:id>', methods=['GET'])
@@ -100,6 +79,18 @@ def delete(id):
     db.session.commit()
     flash(u'数据删除成功!')
     return redirect(url_for('.index'))
+
+
+# 保存监控项目方法
+def save_cmp(data):
+    name = data.get('name')
+    if Cmp.query.filter_by(name=name).first():
+        flash(u'监控平台{}已存在, 添加失败!'.format(name), 'danger')
+        return False
+
+    cmp = Cmp(**data)
+    db.session.add(cmp)
+    return True
 
 
 def _render(content, kwargs={}):
