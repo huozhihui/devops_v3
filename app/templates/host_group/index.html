@@ -26,17 +26,17 @@
     </div>
     <div>
         {{ macros.render_add_btn('host_group.new') }}
-        {{ macros.render_load_btn('更新数据') }}
-        <div id='update_data' style="display: inline; color: green;"></div>
+{#        {{ macros.render_load_btn('更新数据') }}#}
+{#        <div id='update_data' style="display: inline; color: green;"></div>#}
     </div>
 {% endblock %}
 {% block scripts %}
     {{ super() }}
     {% include 'includes/js/_update_data.html' %}
     <script>
-        $(function () {
-            update_data_from_zabbix('/host_group/ajax_update_group')
-        })
+{#        $(function () {#}
+{#            update_data_from_zabbix('/host_group/ajax_update_group')#}
+{#        })#}
     </script>
 
 {% endblock %}
