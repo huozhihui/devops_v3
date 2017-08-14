@@ -17,21 +17,25 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1" role="button"
                        aria-haspopup="true"
-                       aria-expanded="false">资产管理<span class="caret"></span></a>
+                       aria-expanded="false">Zabbix管理<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/inventory/index">主机管理</a></li>
                         <li><a href="/host_group/index">主机组管理</a></li>
+                        <li><a href="/cmp/index">监控平台管理</a></li>
+                        <li><a href="/cmp_item/index">监控项目管理</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/host_group/new">主机组添加</a></li>
-                        <li role="separator" class="divider"></li>
+                        <li><a href="/cmp_item/fast_new">监控项目添加</a></li>
+                        {#                        <li role="separator" class="divider"></li>#}
+
                         {#                        <li><a href="/host/index">主机管理</a></li>#}
                         {#                        <li><a href="/host/new">主机添加</a></li>#}
                     </ul>
                 </li>
 
-                <li {% if 'problem' in request.url_rule.rule %} class="active" {% endif %}>
-                    <a href="/problem/index">监控告警</a>
-                </li>
+                {#                <li {% if 'problem' in request.url_rule.rule %} class="active" {% endif %}>#}
+                {#                    <a href="/problem/index">监控告警</a>#}
+                {#                </li>#}
                 {#                <li><a href="/problem/index">数据分析</a></li>#}
                 {#                <li><a href="/host/index">图形</a></li>#}
 
@@ -74,10 +78,9 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="/script_manage/new">脚本添加</a></li>
                         <li><a href="/component/new">组件添加</a></li>
-                        <li role="separator" class="divider"></li>
+                        {#                        <li role="separator" class="divider"></li>#}
                         {#                        <li><a href="/software/optimize">Zabbix管理</a></li>#}
-                        <li><a href="/cmp/index">监控平台管理</a></li>
-                        <li><a href="/cmp_item/index">监控项目管理</a></li>
+
                     </ul>
                 </li>
 

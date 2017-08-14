@@ -6,10 +6,10 @@
 {% endmacro %}
 
 
-<!-- 弹出框按钮 -->
-{% macro render_dialog_btn(name, url, id) %}
+<!-- 弹出框按钮, 默认 -->
+{% macro render_dialog_btn(name, url, id=0) %}
     <a href="#" data-target="#myModal" data-toggle="modal" onclick="show_dialog('{{ url_for(url, id=id) }}')"
-       remote="true" class="btn btn-outline btn-primary btn-xs">{{ name }}
+       remote="true" class="btn btn-outline btn-default">{{ name }}
     </a>
 {% endmacro %}
 
