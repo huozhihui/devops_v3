@@ -1,8 +1,8 @@
-"""create database
+"""create table
 
-Revision ID: baadaf5b3851
+Revision ID: 9159a11825ff
 Revises: 
-Create Date: 2017-08-04 16:41:15.861955
+Create Date: 2017-08-16 17:33:03.527189
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'baadaf5b3851'
+revision = '9159a11825ff'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,6 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('name', sa.String(length=30), nullable=True),
     sa.Column('groupid', sa.Integer(), nullable=True),
-    sa.Column('hostid', sa.Integer(), nullable=True),
     sa.Column('notes', sa.TEXT(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
@@ -69,7 +68,8 @@ def upgrade():
     sa.Column('type', sa.String(length=50), nullable=True),
     sa.Column('brand', sa.String(length=100), nullable=True),
     sa.Column('asset_tag', sa.String(length=50), nullable=True),
-    sa.Column('name', sa.String(length=50), nullable=True),
+    sa.Column('name', sa.String(length=80), nullable=True),
+    sa.Column('alias', sa.String(length=80), nullable=True),
     sa.Column('used', sa.TEXT(), nullable=True),
     sa.Column('os', sa.String(length=100), nullable=True),
     sa.Column('os_short', sa.String(length=50), nullable=True),
@@ -133,6 +133,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('name', sa.String(length=30), nullable=True),
+    sa.Column('hostid', sa.Integer(), nullable=True),
     sa.Column('applicationid', sa.Integer(), nullable=True),
     sa.Column('itemid', sa.Integer(), nullable=True),
     sa.Column('value', sa.String(length=50), nullable=True),
@@ -150,13 +151,13 @@ def upgrade():
     sa.Column('password', sa.String(length=50), nullable=True),
     sa.Column('ip', sa.String(length=15), nullable=True),
     sa.Column('port', sa.Integer(), nullable=True),
-    sa.Column('status', sa.Boolean(), nullable=True),
     sa.Column('add_way', sa.String(length=10), nullable=True),
+    sa.Column('main', sa.Integer(), nullable=True),
+    sa.Column('type', sa.Integer(), nullable=True),
     sa.Column('notes', sa.TEXT(), nullable=True),
     sa.Column('inventory_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['inventory_id'], ['inventorys.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('ip')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('inventory_updates',
     sa.Column('id', sa.Integer(), nullable=False),

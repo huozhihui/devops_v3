@@ -91,11 +91,13 @@ class Host(Base):
     __tablename__ = 'hosts'
     username = db.Column(db.String(50))
     password = db.Column(db.String(50))
-    ip = db.Column(db.String(15), unique=True)
+    ip = db.Column(db.String(15))
     port = db.Column(db.Integer, default=22)
-    status = db.Column(db.Boolean, default=False)
+    # status = db.Column(db.Boolean, default=False)
     # 添加方式, manual手动, auto自动
     add_way = db.Column(db.String(10), default='manual')
+    main = db.Column(db.Integer, default=1)
+    type = db.Column(db.Integer)
     notes = db.Column(db.TEXT())
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventorys.id'))
 
@@ -126,8 +128,8 @@ class Inventory(Base):
     type = db.Column(db.String(50))
     brand = db.Column(db.String(100))
     asset_tag = db.Column(db.String(50))
-    name = db.Column(db.String(50))
-    alias = db.Column(db.String(50))
+    name = db.Column(db.String(80))
+    alias = db.Column(db.String(80))
     used = db.Column(db.TEXT())
     os = db.Column(db.String(100))
     os_short = db.Column(db.String(50))
