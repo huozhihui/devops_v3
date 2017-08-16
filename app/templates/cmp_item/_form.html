@@ -1,0 +1,19 @@
+<form action="" id="myform" method="post" class="form form-horizontal" role="form"
+      novalidate="novalidate">
+    {{ form.csrf_token }}
+    {% import 'macros/render_field.html' as macros %}
+    {% import 'macros/render_select.html' as ms_select %}
+    {{ ms_select.render_select("主机", "host") }}
+    {{ ms_select.render_select("应用集", "application") }}
+    {{ ms_select.render_select("监控项", "item") }}
+    {{ macros.render_field(form.name) }}
+    {#        {{ macros.hidden_field(form.value_type) }}#}
+    {{ macros.render_field(form.notes) }}
+
+    {% import 'macros/render_submit.html' as macros %}
+    {% if "edit" in request.url_rule.rule %}
+        {{ macros.render_submit(url_for('cmp_item.index')) }}
+    {% else %}
+        {{ macros.render_submit(url_for('cmp.index')) }}
+    {% endif %}
+</form>

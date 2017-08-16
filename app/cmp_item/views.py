@@ -38,8 +38,39 @@ def new(id):
 
             # 保存监控平台项目cmp_item表
             form_data['cmp_id'] = cmp.id
-            if not save_cmp_item(cmp, form_data):
-                return _render('new', locals())
+            if save_cmp_item(cmp, form_data):
+                return redirect(url_for('.new'))
+
+    return _render('form', locals())
+
+
+@cmp_item.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit(id):
+    header = u'编辑'
+    cmp_item = CmpItem.query.get_or_404(id)
+    cmp = cmp_item.cmp
+    form = CmpItemForm(obj=cmp_item)
+    if request.method == "POST":
+        if form.validate_on_submit():
+            form.hostid.data = int(request.form.get('host'))
+            form.applicationid.data = int(request.form.get('application'))
+            form.itemid.data = int(request.form.get('item'))
+            form.populate_obj(cmp_item)
+            flash(u'监控项目{}编辑成功!'.format(cmp_item.name))
+            return redirect(url_for(".index"))
+
+            # form_data = dict(hostid=int(request.form.get('host')),
+            #                  applicationid=int(request.form.get('application')),
+            #                  itemid=int(request.form.get('item')),
+            #                  name=form.name.data,
+            #                  notes=form.notes.data
+            #                  )
+
+            # 保存监控平台项目cmp_item表
+            # form_data['cmp_id'] = cmp.id
+            # if not save_cmp_item(cmp, form_data):
+            #     return _render('new', locals())
 
     return _render('form', locals())
 
@@ -153,11 +184,17 @@ def fast_new():
     form = CmpItemForm()
     select_groups = HostGroup.query.all()
     if request.method == "POST":
+        try:
+            form.hostid.data = int(request.form.get('host'))
+            form.applicationid.data = int(request.form.get('application'))
+            form.itemid.data = int(request.form.get('item'))
+        except Exception, e:
+            print e.message
         if form.validate_on_submit():
             cmp_data = dict(group_id=int(request.form.get('group')))
-            cmp_item_data = dict(hostid=int(request.form.get('host')),
-                                 applicationid=int(request.form.get('application')),
-                                 itemid=int(request.form.get('item')),
+            cmp_item_data = dict(hostid=form.hostid.data,
+                                 applicationid=form.applicationid.data,
+                                 itemid=form.itemid.data,
                                  name=form.name.data,
                                  notes=form.notes.data
                                  )
@@ -174,8 +211,10 @@ def fast_new():
 
             # 保存监控平台项目cmp_item表
             cmp_item_data['cmp_id'] = cmp.id
-            if not save_cmp_item(cmp, cmp_item_data):
-                return _render('fast_new', locals())
+            if save_cmp_item(cmp, cmp_item_data):
+                return redirect(url_for('.fast_new'))
+        else:
+            flash(u'表单验证失败, 请完善必填项!')
 
     return _render('fast_new', locals())
 
@@ -196,9 +235,9 @@ def save_cmp_item(cmp, data):
         flash(u'监控项目{}添加成功!'.format(name))
         return True
     except Exception, e:
-        flash(u'监控项目{}添加失败, 请联系管理员!'.format(name), 'danger')
         print e.message
         db.session.rollback()
+        flash(u'监控项目{}添加失败, 请联系管理员!'.format(name), 'danger')
         return False
 
 

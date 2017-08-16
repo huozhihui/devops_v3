@@ -10,6 +10,7 @@
         init_host_select();
         init_application_select();
     });
+
     $("form").validate();
 
     // 改变组下拉框时, 动态修改主机下拉框
@@ -50,15 +51,15 @@
             url: "/cmp_item/ajax_get_hosts/" + group_id,
             method: "get",
             success: function (response) {
+                host_select.empty();
                 if (response.code == '200') {
-                    host_select.empty();
-                    host_select.append(response.msg);
-                    set_application_select();
                     $('#host_error').hide();
                     $('#host_error').text();
+                    host_select.append(response.msg);
                     {% if "edit" in request.url_rule.rule %}
-                        host_select.val({{ cmp.hostid }});
+                        host_select.val({{ cmp_item.hostid }});
                     {% endif %}
+                    set_application_select();
                 } else {
                     $('#host_error').show();
                     $('#host_error').text(response.msg);
@@ -77,15 +78,17 @@
             url: "/cmp_item/ajax_get_applications/" + host_id,
             method: "get",
             success: function (response) {
+                $("#application_id").empty();
                 if (response.code == '200') {
-                    $("#application_id").empty();
-                    $("#application_id").append(response.msg);
-                    set_item_select();
                     $('#application_error').hide();
                     $('#application_error').text();
+                    $("#application_id").append(response.msg);
                     {% if "edit" in request.url_rule.rule %}
-                        $("#application_id").val({{ cmp_item.applicaitonid }});
+                        if ("{{ cmp_item.hostid }}" == host_id) {
+                            $("#application_id").val({{ cmp_item.applicationid }});
+                        }
                     {% endif %}
+                    set_item_select();
                 } else {
                     $('#application_error').show();
                     $('#application_error').text(response.msg);
@@ -105,13 +108,15 @@
             url: "/cmp_item/ajax_get_items/" + applicationid,
             method: "get",
             success: function (response) {
+                item_select.empty();
                 if (response.code == '200') {
-                    item_select.empty();
-                    item_select.append(response.msg);
                     $('#item_error').hide();
                     $('#item_error').text();
+                    item_select.append(response.msg);
                     {% if "edit" in request.url_rule.rule %}
-                        item_select.val({{ cmp_item.itemid }});
+                        if ("{{ cmp_item.applicationid }}" == applicationid) {
+                            item_select.val({{ cmp_item.itemid }});
+                        }
                     {% endif %}
                 } else {
                     $('#item_error').show();

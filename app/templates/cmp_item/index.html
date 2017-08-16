@@ -20,7 +20,7 @@
                     <td>{{ obj.name }}</td>
                     <td>{{ obj.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                     <td>
-                        {#                        {{ macros.render_btn('编辑', 'host_group.edit', obj.id) }}#}
+                        {{ macros.render_btn('编辑', 'cmp_item.edit', obj.id) }}
                         {{ macros.render_btn('删除', 'cmp_item.delete', obj.id) }}
                     </td>
                 </tr>

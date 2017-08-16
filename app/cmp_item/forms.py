@@ -9,6 +9,11 @@ from wtforms.validators import Required, DataRequired, Optional
 # 定义表单类
 class CmpItemForm(FlaskForm):
     name = StringField(u'名称', validators=[DataRequired(u"必填项")])
+    hostid = IntegerField(u'主机', validators=[DataRequired(u"必填项")])
+    applicationid = IntegerField(u'应用集', validators=[DataRequired(u"必填项")])
+    itemid = IntegerField(u'监控项', validators=[DataRequired(u"必填项")])
+
+
     # value_type = HiddenField(u'数值类型')
     notes = TextAreaField(u'备注')
     # submit = SubmitField(u'提交')
