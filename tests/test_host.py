@@ -3,6 +3,7 @@
 import unittest
 from app.zabbix_api import host
 
+
 class TestZabbixHostApi(unittest.TestCase):
     # 测试获取主机组
     @unittest.skip('skip get groups.')
@@ -27,21 +28,30 @@ class TestZabbixHostApi(unittest.TestCase):
         # hosts = host.get(filter={'hostid': 11027}, selectItems="extend")
         # for h in hosts:
         #     print h.hostid, h.name, h.items
-            # for res in h.items:
-            #     print "监控ID: {} 监控名: {} ".format(res.itemid, res.name)
+        # for res in h.items:
+        #     print "监控ID: {} 监控名: {} ".format(res.itemid, res.name)
 
+    # @unittest.skip('skip get items.')
     def test_get_inventory(self):
         hosts = host.get_inventory()
         for h in hosts:
-            print h.hostid, h.name
+            print h.hostid, h.name, h.host
             print "=========================="
             print h.inventory
             for inventory in h.inventory:
                 for key, value in inventory.__dict__.items():
                     print "%20s: %s" % (key, value)
-            # inventory = h.inventory[0]
-            # print inventory.data
+                    # inventory = h.inventory[0]
+                    # print inventory.data
 
+    @unittest.skip('skip get interfaces.')
+    def test_get_interfaces(self):
+        hosts = host.get_interfaces()
+        for h in hosts:
+            print h.hostid, h.name
+            for res in h.interfaces:
+                info = "IP: {}  DNS: {} Main: {} Port: {} Type: {} Useip: {}"
+                print info.format(res.ip, res.dns, res.main, res.port, res.type, res.useip)
 
 
 if __name__ == '__main__':

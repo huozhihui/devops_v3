@@ -22,6 +22,7 @@ from zabbix_hostgroup import ZabbixHostGroup
 from zabbix_application import ZabbixApplication
 from zabbix_item import ZabbixItem
 from zabbix_history import ZabbixHistory
+from zabbix_interface import ZabbixInterface
 
 
 # 判断zabbix server是否连接成功的方法
