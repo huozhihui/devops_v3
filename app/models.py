@@ -406,7 +406,7 @@ class CmpItem(Base):
     applicationid = db.Column(db.Integer)
     itemid = db.Column(db.Integer)
     # value_type = db.Column(db.String(50))
-    value = db.Column(db.String(50))
+    value = db.Column(db.String(50), default=0)
     notes = db.Column(db.TEXT())
     cmp_id = db.Column(db.Integer, db.ForeignKey('cmps.id'))
 
