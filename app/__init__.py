@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy, Model
 from config import config
 from flask_login import LoginManager
 # from flask_navigation import Navigation
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 from flask_celery import Celery
 
 bootstrap = Bootstrap()
