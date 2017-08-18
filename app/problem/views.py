@@ -3,8 +3,8 @@
 from flask import render_template, request, session, flash
 from flask_login import login_required
 import time
-from flask_socketio import emit
-from .. import socketio
+# from flask_socketio import emit
+# from .. import socketio
 
 from . import problem
 from .. import zabbix_api
@@ -30,7 +30,7 @@ def _render(content, **kwargs):
 
 
 # websocket方法
-@socketio.on('connect_event')
+# @socketio.on('connect_event')
 def connected_msg(msg):
     problems = zabbix_api.trigger.problems()
     data = []
@@ -48,7 +48,6 @@ def connected_msg(msg):
         priority_color.append(pb.priority_color)
     emit('ws_problem_update_table', {'data': data})
     emit('ws_problem_update_priority_color', {'data': priority_color})
-
 
 # 显示主机信息
 # @host.route('/show/<int:id>', methods=['GET'])
@@ -104,4 +103,3 @@ def connected_msg(msg):
 # def trigger_info(id):
 #     triggers = zabbix_api.host.get_triggers(id)
 #     return _show_host('_trigger_info', triggers=triggers)
-
