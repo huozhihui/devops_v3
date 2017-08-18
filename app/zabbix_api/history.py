@@ -26,3 +26,17 @@ def get(itemid, value_type, **kwargs):
     except Exception, e:
         print e.message
     return result
+
+
+if __name__ == '__main__':
+    import item, history, datetime
+
+    results = item.filter(itemid=140392)
+    print results
+    for res in results:
+        print res.itemid, res.value_type, res.delay
+        his = history.get(res.itemid, res.value_type)
+        for h in his:
+            dateArray = datetime.datetime.fromtimestamp(float(h.clock))
+            dt = dateArray.strftime("%Y-%m-%d %H:%M:%S")
+            print dt, h.clock, h.value, h.ns
