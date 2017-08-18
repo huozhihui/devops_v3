@@ -6,18 +6,30 @@
         }
         var socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on('connect', function () {
-            socket.emit('connect_event', {method: 'ws_problem_update_table', data: {}});
+            socket.emit('connect_event', {});
         });
 
-        var table_tbody = $('#dataTables-example tbody');
-
-        // 更新表数据
-        socket.on('ws_problem_update_table', function (msg) {
-            // 清除所有表
-            table_tbody.empty();
-            for (var i = 0; i < msg.data.length; i++) {
-                create_table('dataTables-example', msg.data[i]);
-            }
+        socket.on('ws_update_page', function (msg) {
+            data = msg.data
+            console.log(data);
+            // 更新CPU数值
+            update_yibiao('container-cpu-cluster', data['cpu_used'], data['cpu_total']);
+            // 更新内存数值
+            update_yibiao('container-memory', data['ram_used'], data['ram_total']);
+            // 更新存储数值
+            update_yibiao('container-storage', data['storage_used'], data['storage_total'])
+            // 更新实例数值
+            update_yibiao('container-instances', data['instances_error'], data['instances_total']);
         });
+    }
+
+    // 更新仪表图形
+    function update_yibiao(id, current_value, max) {
+        var chart = $('#' + id).highcharts(), point;
+        if (chart) {
+            point = chart.series[0].points[0];
+            chart.yAxis[0].setExtremes(0, max);
+            point.update(current_value);
+        }
     }
 </script>

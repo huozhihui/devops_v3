@@ -1,0 +1,17 @@
+<!-- 线性图 -->
+{% macro render_div(name) %}
+    <div id="{{ name }}" style="width: 50%; height: 200px; float: left"></div>
+{% endmacro %}
+<div class="row">
+    <div style=" margin: 0 auto">
+{#        <div id="container-cpu-percent" style="width:300px;height:250px; float: left; padding: 0 20px;"></div>#}
+
+        {#        {% include 'main/_ss_cpu_percent.html' %}#}
+        {#    {% include 'main/_ss_disk_percent.html' %}#}
+        {#    {% include 'main/_ss_memory_percent.html' %}#}
+        {{ render_div('container-cpu-percent') }}
+        {#        {{ render_div('container-memory') }}#}
+        {#        {{ render_div('container-storage') }}#}
+        {#        {{ render_div('container-instances') }}#}
+    </div>
+</div>

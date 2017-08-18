@@ -2,22 +2,40 @@
 {% block page_header %}
     <!-- 下拉框 -->
     <div class="page-header">
-        <div class="form-inline">
-            <h3>云平台:
-                <select class="form-control min-wp20 ml10" id="select-group" name="type" required=""
-                        aria-required="true">
-                    {% for group in hostgroups %}
-                        <option value="{{ group.groupid }}">{{ group.name }}</option>
-                    {% endfor %}
-                </select>
-            </h3>
-        </div>
+        <form action="" id="myform" method="post" class="form form-horizontal" role="form">
+            <div class="form-inline">
+                <h3>云平台:
+                    <select class="form-control min-wp20 ml10" id="select_cmp" name="cmp" required=""
+                            aria-required="true">
+                        <option value="0"></option>
+                        {% for obj in cmps %}
+                            {% if session.get('main_cmp_id') == obj.id %}
+                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                            {% else %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {#                    {% import 'macros/render_btn.html' as macros %}#}
+                    {#                    {{ macros.render_dialog_btn("添加", "cmp.fast_new") }}#}
+                </h3>
+
+            </div>
+        </form>
     </div>
+    {#    {% include 'includes/show_dialog.html' %}#}
 {% endblock %}
 
 {% block page_content %}
-    {#    {% include 'main/row1.html' %}#}
-    {#    {% include 'main/row2.html' %}#}
+    <!-- openstack组件信息显示 -->
+        {% include 'main/row1.html' %}
+
+    <!-- 内存、cpu核数、存储、实例等信息显示, 仪表 -->
+        {% include 'main/row2.html' %}
+
+    <!-- mysql进程监控, 线性图 -->
+{#    {% include 'main/row3.html' %}#}
+
     {#    {% include 'main/row1.html' %}#}
     {#    {% include 'main/row1.html' %}#}
     {#    <div class="page-header"></div>#}
@@ -27,26 +45,21 @@
     {{ super() }}
     <script>
         $(function () {
-            $('#select-group').change(function () {
-                groupid = $(this).val();
-                $.ajax({
-                    url: "/ajax_get_hosts/" + groupid,
-                    method: "get",
-                    success: function (response) {
-                        $('#select-group').after(response);
-                    }
-                });
-            })
+            var select_cmp = $('#select_cmp');
+            // 点击下拉框,提交表单
+            select_cmp.change(function () {
+                $('#myform').submit();
+            });
+
+            // 如果已选下拉框,则启动websocket
+            if (select_cmp.val() != 0) {
+                console.log('start websocket')
+                start_ws();
+            }
         })
     </script>
-    <!-- 仪表 -->
-    {#    {% include 'main/_cpu_and_memory_percent.html' %}#}
-    {#    {% include 'main/_memory.html' %}#}
-    {#    {% include 'main/_trigger.html' %}#}
-    {#    {% include 'main/_host_count.html' %}#}
-    {#    {% include 'main/_monitor.html' %}#}
-
-    {#    {% include 'main/_ss_cpu_percent.html' %}#}
-    {#    {% include 'main/_ss_disk_percent.html' %}#}
-    {#    {% include 'main/_ss_memory_percent.html' %}#}
+    <!-- 加载仪表js -->
+    {% include 'main/_row2_js.html' %}
+{#    {% include 'main/_row3_js.html' %}#}
+    {% include 'main/_websocket.html' %}
 {% endblock %}
