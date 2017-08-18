@@ -26,12 +26,12 @@ class Config:
     CELERYBEAT_SCHEDULE = {
         'import_zabbix_data': {
             'task': 'import_zabbix_data',
-            'schedule': timedelta(minutes=5)
+            'schedule': timedelta(minutes=3)
             # 'schedule': 5.0
         },
-        'update_item_value_data': {
-            'task': 'import_zabbix_data',
-            'schedule': timedelta(minutes=3)
+        'import_item_value_data': {
+            'task': 'import_item_value_data',
+            'schedule': timedelta(minutes=1)
         }
     }
 
