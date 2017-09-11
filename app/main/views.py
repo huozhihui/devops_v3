@@ -6,6 +6,7 @@ from . import main
 from ..models import Cmp, CmpItem
 from .. import socketio, emit
 import time
+import random
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -19,6 +20,7 @@ def index():
 
     # 获取各监控项最新参数
     item_data = get_latest_data()
+    print item_data
 
     print item_data
     return _render('index', locals())
@@ -26,7 +28,8 @@ def index():
 
 # 获取各监控项最新参数
 def get_latest_data():
-    data = dict()
+    data = dict(mysql_select=[random.randint(0, 1000) for i in range(0, 120)] or [0] * 120,
+                mysql_insert=[random.randint(0, 1000) for i in range(0, 120)] or [0] * 120)
     if 'main_cmp_id' not in session:
         return data
 
@@ -38,8 +41,8 @@ def get_latest_data():
         for cmp_item in cmp_items:
             if cmp_item.name in to_TB:
                 value = "%0.3f" % (int(cmp_item.value) / 1024.0 ** 4)
-            # elif 'mysql' in cmp_item.name:
-            #     pass
+            elif 'mysql' in cmp_item.name:
+                value = [random.randint(0, 1000) for i in range(0, 120)] or [0] * 120
             else:
                 value = cmp_item.value
             data[cmp_item.name] = value

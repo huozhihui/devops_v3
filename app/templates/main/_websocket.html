@@ -26,9 +26,20 @@
     // 更新仪表图形
     function update_yibiao(id, current_value, max) {
         var chart = $('#' + id).highcharts(), point;
-        if (chart) {
+        if (chart && current_value) {
             point = chart.series[0].points[0];
             chart.yAxis[0].setExtremes(0, max);
+            point.update(current_value);
+        }
+    }
+
+    // 更新动态线性图
+    function update_dynamic_line(id, current_value, max) {
+        var chart = $('#' + id).highcharts(), point;
+        if (chart && current_value) {
+            point = chart.series[0].points[0];
+            chart.yAxis[0].setExtremes(0, max);
+            console.log(current_value)
             point.update(current_value);
         }
     }

@@ -2,16 +2,23 @@
 {% macro render_div(name) %}
     <div id="{{ name }}" style="width: 50%; height: 200px; float: left"></div>
 {% endmacro %}
-<div class="row">
+<div class="row mt10">
     <div style=" margin: 0 auto">
-{#        <div id="container-cpu-percent" style="width:300px;height:250px; float: left; padding: 0 20px;"></div>#}
+        {#        <div id="container-cpu-percent" style="width:300px;height:250px; float: left; padding: 0 20px;"></div>#}
 
         {#        {% include 'main/_ss_cpu_percent.html' %}#}
         {#    {% include 'main/_ss_disk_percent.html' %}#}
         {#    {% include 'main/_ss_memory_percent.html' %}#}
-        {{ render_div('container-cpu-percent') }}
-        {#        {{ render_div('container-memory') }}#}
-        {#        {{ render_div('container-storage') }}#}
-        {#        {{ render_div('container-instances') }}#}
+        {{ render_div('container-mysql-select') }}
+        {{ render_div('container-mysql-insert') }}
+        {#        {{ render_div('container-mysql') }}#}
+
+
+    </div>
+</div>
+<div class="row mt10">
+    <div style=" margin: 0 auto">
+        {{ render_div('container-rabbitmq1') }}
+        {{ render_div('container-rabbitmq2') }}
     </div>
 </div>

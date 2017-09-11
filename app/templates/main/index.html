@@ -28,13 +28,13 @@
 
 {% block page_content %}
     <!-- openstack组件信息显示 -->
-        {% include 'main/row1.html' %}
+    {% include 'main/row1.html' %}
 
     <!-- 内存、cpu核数、存储、实例等信息显示, 仪表 -->
-        {% include 'main/row2.html' %}
+    {% include 'main/row2.html' %}
 
     <!-- mysql进程监控, 线性图 -->
-{#    {% include 'main/row3.html' %}#}
+    {% include 'main/row3.html' %}
 
     {#    {% include 'main/row1.html' %}#}
     {#    {% include 'main/row1.html' %}#}
@@ -60,6 +60,6 @@
     </script>
     <!-- 加载仪表js -->
     {% include 'main/_row2_js.html' %}
-{#    {% include 'main/_row3_js.html' %}#}
+    {% include 'main/_row3_js.html' %}
     {% include 'main/_websocket.html' %}
 {% endblock %}

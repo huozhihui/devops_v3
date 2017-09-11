@@ -66,7 +66,7 @@
             },
             series: [{
                 name: 'CPU内核使用',
-                data: [{{ item_data['cpu_used'] or 0 }}],
+                data: [{{item_data['cpu_used'] or ""}}],
                 dataLabels: {
                     format: '<div style="text-align:center"><span style="font-size:20px;color:' +
                     ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span>' +
@@ -93,7 +93,7 @@
             },
             series: [{
                 name: '内存使用',
-                data: [{{ item_data['ram_used'] or 0 }}],
+                data: [{{item_data['ram_used'] or ""}}],
                 dataLabels: {
                     format: '<div style="text-align:center"><span style="font-size:20px;color:' +
                     ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span>' +
@@ -120,7 +120,7 @@
             },
             series: [{
                 name: '存储使用',
-                data: [{{ item_data['storage_used'] or 0 }}],
+                data: [{{item_data['storage_used'] or ""}}],
                 dataLabels: {
                     format: '<div style="text-align:center"><span style="font-size:20px;color:' +
                     ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span>' +
@@ -152,7 +152,7 @@
             },
             series: [{
                 name: '异常实例',
-                data: [{{ item_data['instances_error'] or 0 }}],
+                data: [{{ item_data['instances_error'] or "" }}],
                 dataLabels: {
                     format: '<div style="text-align:center"><span style="font-size:18px;color:' +
                     ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span>' +
