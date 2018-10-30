@@ -20,7 +20,11 @@
                 <tr>
                     <td>{{ h.inventory.type }}</td>
                     <td>{{ h.inventory.asset_tag }}</td>
-                    <td title="{{ h.inventory.os }}">{{ h.inventory.os|truncate(50) }}</td>
+                    <td title="{{ h.inventory.os }}">
+                        {% if h.inventory.os %}
+                            {{ h.inventory.os|truncate(50) }}
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{{ url_for('host.edit', id=h.id) }}">
                             {{ h.ip or h.inventory.name }}
@@ -60,7 +64,7 @@
                 method: "get",
                 success: function (response) {
                     $this.button('reset');
-                    if(response.code=='500'){
+                    if (response.code == '500') {
                         $('#update_data').css('color', 'red');
                     }
                     $('#update_data').html(response.msg);
@@ -68,14 +72,14 @@
             });
         });
 
-{#        function ajax_update_data() {#}
-{#            $.ajax({#}
-{#                url: '/host/ajax_update_data',#}
-{#                method: "get",#}
-{#                success: function (response) {#}
-{#                    $('#update_data').html(response.msg);#}
-{#                }#}
-{#            });#}
-{#        }#}
+        {#        function ajax_update_data() {#}
+        {#            $.ajax({#}
+        {#                url: '/host/ajax_update_data',#}
+        {#                method: "get",#}
+        {#                success: function (response) {#}
+        {#                    $('#update_data').html(response.msg);#}
+        {#                }#}
+        {#            });#}
+        {#        }#}
     </script>
 {% endblock %}

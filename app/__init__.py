@@ -62,6 +62,8 @@ def create_app(config_name):
     # 首页-蓝本
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(main_blueprint, url_prefix='/main')
+
 
     # 主机组蓝本
     from .host_group import host_group as host_group_blueprint

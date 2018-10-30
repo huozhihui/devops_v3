@@ -1,23 +1,33 @@
 {% extends "extends/base_page.html" %}
 {#{% import "bootstrap/wtf.html" as wtf %}#}
 {% block page_content %}
+    {% import 'macros/render_select.html' as ms_select %}
+    <!-- 主机多选下拉框 -->
+    {% macro field_select(label_name, select_name, objects, option, select_class='form-control') %}
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="type">{{ label_name }}</label>
+            <span class="red fl">*</span>
+            <div class="col-sm-6">
+                <select class="{{ select_class }}" id="{{ select_name }}_id" name="{{ select_name }}" multiple
+                        data-placeholder=" " tabindex="1">
+                    <option value=""></option>
+                    {% for obj in objects %}
+                        <option value="{{ obj[option[0]] }}">{{ obj[option[1]] }}</option>
+                    {% endfor %}
+                </select>
+                <label id="{{ select_name }}_error" class="error" for="type" style="display:none"> </label>
+            </div>
+        </div>
+    {% endmacro %}
+
     <form action="" id="myform" method="post" class="form form-horizontal min-h200" enctype="multipart/form-data"
           role="form"
           novalidate="novalidate">
+        <!-- 选择主机组 -->
+        {{ ms_select.render_select("主机组", "host_group", host_groups, ['id', 'name']) }}
+
         <!-- 多选框, 主机 -->
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="name">选择主机</label>
-            <span class="red fl">*</span>
-            <div class=" col-sm-6">
-                <select class="chosen-select" name="hosts" multiple data-placeholder=" " tabindex="1">
-                    <option value=""></option>
-                    {% for h in hosts %}
-                        <option value="{{ h.id }}"
-                                {% if h.id in select_host_ids %}selected{% endif %}>{{ h.ip }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
+        {{ field_select("选择主机", "hosts", hosts, ['id', 'ip'], "chosen-select") }}
 
         {% for var in script_manage.variables %}
             <div class="form-group">
@@ -61,13 +71,48 @@
             // 初始化, 设置主机为多选框
             $(".chosen-select").chosen({
                 max_selected_options: 100,
-                {#            placeholder_text: ' ',#}
+                placeholder_text: ' ',
                 no_results_text: "没有找到"
             });
+
+            set_host_select();
+            // 初始化, 设置主机组下拉框事件
+            init_hostgroup_select();
 
             // 初始化, 设置遮罩为隐藏
             $('#reload').hide();
         })
+
+        // 改变主机组下拉框时, 动态修改主机下拉框
+        function init_hostgroup_select() {
+            $('#host_group_id').change(function () {
+                set_host_select();
+            });
+        }
+
+        // 设置主机下拉框的options
+        function set_host_select() {
+            var hostgroup_id = $('#host_group_id').val();
+            if (hostgroup_id == null) {
+                return false;
+            }
+            $.ajax({
+                url: "/script_manage/ajax_get_hosts/" + hostgroup_id,
+                method: "get",
+                success: function (response) {
+                    $("#hosts_id").empty();
+                    if (response.code == '200') {
+                        $('#hosts_error').hide();
+                        $('#hosts_error').text();
+                        $("#hosts_id").append(response.msg);
+                        $(".chosen-select").trigger('chosen:updated');
+                    } else {
+                        $('#hosts_error').show();
+                        $('#hosts_error').text(response.msg);
+                    }
+                }
+            })
+        }
 
 
         // 点击执行按钮后,执行任务
@@ -102,24 +147,24 @@
             flag = true;
             $('input[aria-required="true"]').each(function () {
                 if ($(this).val() == '') {
+                    $('.flash_msg').html("请填写脚本的所有变量!");
+                    $('.alert-danger').addClass('show');
                     flag = false;
                 } else {
                     data[$(this).attr('name')] = $(this).val();
                 }
             });
 
+            // 获取主机组值
+            host_group = $('select[name=host_group]').val();
+            data['host_group'] = host_group;
+
             // 判断是否选择主机
             host = $('select[name=hosts]').val();
-            if (host == null) {
-                flag = false;
-            } else {
+            if (host != null) {
                 data['hosts'] = JSON.stringify(host);
             }
 
-            if (flag == false) {
-                $('.flash_msg').html("请选择主机并填写所有变量!");
-                $('.alert-danger').addClass('show');
-            }
             return flag;
         }
     </script>

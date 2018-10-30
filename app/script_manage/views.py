@@ -1,18 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from flask import render_template, request, session, flash, redirect, url_for
+from flask import render_template, request, session, flash, redirect, url_for, jsonify
 from flask_login import login_required
 
-import os
-import random
-import time
 import json
 import tempfile
-from datetime import datetime
 from ..plugins import ansible_api
 from . import script_manage
 from forms import ScriptForm
-from ..models import ScriptManage, ScriptVariable, Host
+from ..models import ScriptManage, ScriptVariable, Host, HostGroup
 from .. import db
 
 
@@ -81,13 +77,28 @@ def delete(id):
 @script_manage.route('/execute/<int:id>', methods=['GET', 'POST'])
 @login_required
 def execute(id):
-    hosts = Host.query.all()
+    host_groups = HostGroup.query.all()
     script_manage = ScriptManage.query.get_or_404(id)
     header = script_manage.name
-    # if request.method == "POST":
-    #     host_id = int(request.form['hosts'])
-    #     ip = Host.query.get_or_404(host_id).ip
     return _render("execute", locals())
+
+
+# 通过主机组获取主机列表
+@script_manage.route('/ajax_get_hosts/<int:hostgroup_id>', methods=['GET'])
+@login_required
+def ajax_get_hosts(hostgroup_id):
+    try:
+        inventorys = HostGroup.query.get_or_404(hostgroup_id).hosts
+        hosts = []
+        for inventory in inventorys:
+            hosts = hosts + inventory.hosts.all()
+        # 去重复
+        objects = list(set(hosts))
+        msg, code = _render('_host_option', locals()), 200
+    except Exception, e:
+        print e
+        msg, code = "获取主机失败!", 500
+    return jsonify({'msg': msg, 'code': code})
 
 
 # 调用ansible,执行任务后返回结果
@@ -95,23 +106,40 @@ def execute(id):
 @login_required
 def ajax_execute_task(id):
     script_manage = ScriptManage.query.get_or_404(id)
-    select_host_ids = json.loads(request.form['hosts'])
-    ips = []
-    for hid in select_host_ids:
-        ips.append(Host.query.get(int(hid)).ip)
+    form_hosts = request.form.get('hosts')
+    from_host_group = request.form.get('host_group')
+    host_objects = []
+    if form_hosts:
+        select_hids = json.loads(form_hosts)
+        for hid in select_hids:
+            host_objects.append(Host.query.get_or_404(int(hid)))
+    else:
+        inventorys = HostGroup.query.get_or_404(from_host_group).hosts
+        for inventory in inventorys:
+            host_objects = host_objects + inventory.hosts.all()
+
+    # 去重复
+    hosts = set(host_objects)
+    hosts = {}
+    for host in host_objects:
+        d = dict(ansible_connection='ssh',
+                 ansible_ssh_user=host.username,
+                 ansible_ssh_pass=host.password,
+                 ansible_ssh_port=host.port)
+        hosts[host.ip] = d
 
     # 获取页面变量,并插入到脚本中
     content_arr = create_script_content(script_manage)
-
     # 写入脚本文件
     if script_manage.type == "sh":
-        temp = tempfile.NamedTemporaryFile(suffix='.sh', prefix='script_', dir='/tmp',)
+        temp = tempfile.NamedTemporaryFile(suffix='.sh', prefix='script_', dir='/tmp')
         try:
             for c in content_arr:
                 temp.write("%s\n" % c)
             temp.seek(0)
             # 调用ansible
-            code, response = ansible_api.run(ips, 'script', temp.name)
+            print "调用ansible接口,执行任务......"
+            code, response = ansible_api.run(hosts, 'script', temp.name)
             results = response.result or {}
             print code
             print response.result
@@ -119,9 +147,8 @@ def ajax_execute_task(id):
             print e.message
             flash(u"写入脚本失败!", 'danger')
         finally:
-            pass
-            # 关闭并自动删除临时脚本
-            # temp.close()
+            # 关闭后自动删除临时脚本
+            temp.close()
 
     return _render('_execute_result', locals())
 

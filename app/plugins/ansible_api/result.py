@@ -54,6 +54,3 @@ class ResultCallback(CallbackBase):
         print u"任务结果: {output}".format(output=output)
         print u"任务总结果: {result}".format(result=result._result)
         self.result[host] = dict(status=status, output=output)
-
-
-result_callback = ResultCallback()

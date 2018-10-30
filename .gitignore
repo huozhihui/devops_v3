@@ -2,6 +2,8 @@
 sample/
 backup/
 .idea/
+README
+*.swp
 # database
 
 # Byte-compiled / optimized / DLL files
