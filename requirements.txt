@@ -33,7 +33,7 @@ Jinja2==2.9.6
 kombu==4.1.0
 Mako==1.0.6
 MarkupSafe==1.0
-paramiko==2.2.1
+paramiko==2.10.1
 psutil==5.2.2
 pyasn1==0.2.3
 pycparser==2.18
